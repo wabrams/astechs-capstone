@@ -26,6 +26,10 @@ socket.on('button', function (data) { //get button event from client
   document.getElementsByName('powerdisplay')[0].value = data; //display the dummy power on front end
 });
 
+socket.on('serialrec', function (data) { //get button event from client
+  document.getElementsByName('powerdisplay')[0].value = data; //display any serially received data
+});
+
 </script>
 
 </body>

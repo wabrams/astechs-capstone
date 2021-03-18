@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+
+<body>
+<h1>Astechs Control Pannel</h1>
+<img src="/img/astechs.png" alt="AsTechs Logo">
+<h2>Outlet Manager</h2>
+<img src="/img/node.png" alt="concept outlet">
+<p><label for="displayValue">Toggle Node: </label>
+<input type="checkbox" id="light"></p>
+<label for="displayValue">The most recent power reading is: </label>
+<input type="textbox" name="powerdisplay"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
+<script>
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  var lightbox = document.getElementById("light");
+  lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
+    socket.emit("light", Number(this.checked)); //send button status to server (as 1 or 0)
+  });
+});
+
+socket.on('button', function (data) { //get button event from client
+  document.getElementsByName('powerdisplay')[0].value = data; //display the dummy power on front end
+});
+
+</script>
+
+</body>
+</html>

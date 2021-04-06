@@ -90,14 +90,14 @@
     {
       if (data.startsWith('BRDA 77'))
       {
-        document.getElementById('n1img_off').style = 'display: none;';
-        document.getElementById('n1img_on').style = 'display: block;';
+        document.getElementById('n1img_off').style.display = 'none';
+        document.getElementById('n1img_on').style.display = 'block';
       }
         // document.getElementById("btn0").style.background='#aa0000';
       else
       {
-        document.getElementById('n1img_off').style = 'display: block;';
-        document.getElementById('n1img_on').style = 'display: none;';
+        document.getElementById('n1img_off').style.display = 'block';
+        document.getElementById('n1img_on').style.display = 'none';
       }
         // document.getElementById("btn0").style.background='#00aa00';
       document.getElementById('pd0').innerHTML = data;

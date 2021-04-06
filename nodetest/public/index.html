@@ -34,23 +34,23 @@
   <div class="row">
     <div class="column" style="background-color:#aaa;">
       <h2>Remote</h2>
-      <p>BRDA</p>
+      <p>REM-A</p>
     </div>
     <div class="column" style="background-color:#bbb;">
       <h2>Node 1</h2>
-      <p>BRDB</p>
-      <img src="/img/node_off.png" width='50' alt="concept outlet">
-      <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <p>BRD-A</p>
+      <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
+      <img id='n1img_on' src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Node 2</h2>
-      <p>BRDC</p>
+      <p>BRD-C</p>
       <img src="/img/node_off.png" width='50' alt="concept outlet">
       <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Node 3</h2>
-      <p>BRDD</p>
+      <p>BRD-D</p>
       <img src="/img/node_off.png" width='50' alt="concept outlet">
       <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
@@ -89,9 +89,17 @@
     if (data.startsWith('BRDA'))
     {
       if (data.startsWith('BRDA 77'))
-        document.getElementById("btn0").style.background='#aa0000';
+      {
+        document.getElementById('n1img_off').style = 'display: none;';
+        document.getElementById('n1img_on').style = 'display: block;';
+      }
+        // document.getElementById("btn0").style.background='#aa0000';
       else
-        document.getElementById("btn0").style.background='#00aa00';
+      {
+        document.getElementById('n1img_off').style = 'display: block;';
+        document.getElementById('n1img_on').style = 'display: none;';
+      }
+        // document.getElementById("btn0").style.background='#00aa00';
       document.getElementById('pd0').innerHTML = data;
     }
     else if (data.startsWith('BRDB'))

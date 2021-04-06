@@ -9,11 +9,16 @@
 <img src="/img/astechs.png" alt="AsTechs Logo">
 <h2>Outlet Manager</h2>
 <img src="/img/node.png" alt="concept outlet">
+
 <p><label for="displayValue">Toggle Node: </label>
 <input type="checkbox" id="light"></p>
+
+<button id='btn0' type='button'>BRDA BTN0</button>
+
 <label for="displayValue">The most recent power reading0 is: </label>
 <input type="textbox" name="powerdisplay0"/>
 <p id='pd0'></p>
+
 <label for="displayValue">The most recent power reading1 is: </label>
 <input type="textbox" name="powerdisplay1"/>
 <p id='pd1'></p>
@@ -35,7 +40,13 @@
   socket.on('serialrec', function (data) { //get button event from client
     data = String(data);
     if (data.startsWith('BRDA'))
+    {
+      if (data.startsWith('BRDA 77'))
+        document.getElementById("btn0").style.background='#aa0000';
+      else
+        document.getElementById("btn0").style.background='#00aa00';
       document.getElementById('pd0').innerHTML = data;
+    }
     else if (data.startsWith('BRDB'))
       document.getElementById('pd1').innerHTML = data;
 

@@ -33,7 +33,12 @@
   // });
 
   socket.on('serialrec', function (data) { //get button event from client
-    document.getElementById('pd0').innerHTML = data;
+    data = String(data);
+    if (data.startsWith('BRDA'))
+      document.getElementById('pd0').innerHTML = data;
+    else if (data.startsWith('BRDB'))
+      document.getElementById('pd1').innerHTML = data;
+
     document.getElementsByName('powerdisplay0')[0].value = data; //display any serially received data
   });
 

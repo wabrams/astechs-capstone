@@ -1,3 +1,3 @@
 # AsTechs GitHub Repository
 
-This is temporarily empty. Come back later.
+The documentation is now under construction. Check back shortly

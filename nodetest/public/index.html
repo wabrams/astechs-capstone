@@ -13,7 +13,7 @@
       width: 25%;
       padding: 10px;
       text-align: center;
-      height: 300px; /* Should be removed. Only for demonstration */
+      /* height: 300px; */
       border: 2px solid black;
     }
     
@@ -27,33 +27,42 @@
 </head>
 
 <body>
-  <h1>Astechs Control Panel</h1>
-  <img src="/img/astechs.png"  width="100" alt="AsTechs Logo">
+  <div style='text-align: center'>
+    <h1>Astechs WebUI</h1>
+    <img src="/img/astechs.png"  width="100" alt="AsTechs Logo">
+    <p>Welcome to the WebUI. Here you can view the status of the current devices in the network!</p>
+  </div>
   
-  <h2>Outlet Manager</h2>
+  <div style='text-align: center'>
+    <h2>Device Overview</h2>
+  </div>
 
   <div class="row">
     <div class="column" style="background-color:#aaa;">
       <h2>Remote</h2>
       <p>RCS1</p>
+      <p>Custom PCB running Thread, the remote control for the system!</p>
     </div>
     <div class="column" style="background-color:#bbb;">
       <h2>Node #1</h2>
       <p>NCS1</p>
       <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n1img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <p>Custom PCB running Thread controlling power outlet!</p>
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Node #2</h2>
       <p>NTB1</p>
       <img id='n2img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n2img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
     </div>
     <div class="column" style="background-color:#ddd;">
       <h2>Node #3</h2>
       <p>NTB2</p>
       <img id='n3img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n3img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
     </div>
   </div>
 

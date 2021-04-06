@@ -54,9 +54,17 @@ function handler (req,res)
       res.end(text);
     })
   }
-  else if (req.url == '/img/node.png')
+  else if (req.url == '/img/node_on.png')
   {
-    fs.readFile("img/node.png", function (err, text)
+    fs.readFile("img/node_on.png", function (err, text)
+    {
+      res.setHeader("Content-Type", "image/png");
+      res.end(text);
+    })
+  }
+  else if (req.url == '/img/node_off.png')
+  {
+    fs.readFile("img/node_off.png", function (err, text)
     {
       res.setHeader("Content-Type", "image/png");
       res.end(text);

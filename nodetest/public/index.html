@@ -41,66 +41,59 @@
       <h2>Node #1</h2>
       <p>NCS1</p>
       <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
-      <img id='n1img_on' src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <img id='n1img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Node #2</h2>
       <p>NTB1</p>
-      <img src="/img/node_off.png" width='50' alt="concept outlet">
-      <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <img id='n2img_off' src="/img/node_off.png" width='50' alt="concept outlet">
+      <img id='n2img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
     <div class="column" style="background-color:#ddd;">
       <h2>Node #3</h2>
       <p>NTB2</p>
-      <img src="/img/node_off.png" width='50' alt="concept outlet">
-      <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
+      <img id='n3img_off' src="/img/node_off.png" width='50' alt="concept outlet">
+      <img id='n3img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
   </div>
 
-  <button id='btn0' type='button'>BRDA BTN0</button>
+  <!-- <button id='btn0' type='button'>BRDA BTN0</button>
+  document.getElementById("btn0").style.background='#aa0000';
+  document.getElementById("btn0").style.background='#00aa00'; -->
 
-  <label for="displayValue">The most recent power reading0 is: </label>
-  <input type="textbox" name="powerdisplay0"/>
-  <p id='pd0'></p>
-
-  <label for="displayValue">The most recent power reading1 is: </label>
-  <input type="textbox" name="powerdisplay1"/>
-  <p id='pd1'></p>
+  <p>Last Received Thread Message: <span id='lastmsg'></span></p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page
-  // window.addEventListener("load", function(){ //when page loads
-  //   var lightbox = document.getElementById("light");
-  //   lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
-  //     socket.emit("light", Number(this.checked)); //send button status to server (as 1 or 0)
-  //   });
-  // });
 
   socket.on('serialrec', function (data) 
   {
     data = String(data);
+
     if (data.startsWith('RCS1'))
     {
-      // document.getElementById("btn0").style.background='#aa0000';
-      // document.getElementById("btn0").style.background='#00aa00';
       if (data.includes('NCS1'))
       {
         var temp = document.getElementById('n1img_off').style.display;
-        document.getElementById('n1img_off').style.display = document.getElementById('n1img_on' ).style.display;
+        document.getElementById('n1img_off').style.display = document.getElementById('n1img_on').style.display;
         document.getElementById('n1img_on' ).style.display = temp;
       }
       else if (data.includes('NTB1'))
       {
-        // document.getElementById('n1img_off').style.display = 'block';
-        // document.getElementById('n1img_on' ).style.display = 'none';
+        var temp = document.getElementById('n2img_off').style.display;
+        document.getElementById('n2img_off').style.display = document.getElementById('n2img_on').style.display;
+        document.getElementById('n2img_on' ).style.display = temp;
       }
-      document.getElementById('pd0').innerHTML = data;
+      else if (data.includes('NTB2'))
+      {
+        var temp = document.getElementById('n3img_off').style.display;
+        document.getElementById('n3img_off').style.display = document.getElementById('n3img_on').style.display;
+        document.getElementById('n3img_on' ).style.display = temp;
+      }
     }
-    else if (data.startsWith('BRDB'))
-      document.getElementById('pd1').innerHTML = data;
 
-    document.getElementsByName('powerdisplay0')[0].value = data; //display any serially received data
+    document.getElementsById('lastmsg') = data;
   });
 
 </script>

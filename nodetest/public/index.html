@@ -84,12 +84,12 @@
     {
       // document.getElementById("btn0").style.background='#aa0000';
       // document.getElementById("btn0").style.background='#00aa00';
-      if (data.endsWith('NCS1'))
+      if (data.includes('NCS1'))
       {
         document.getElementById('n1img_off').style.display = 'none';
         document.getElementById('n1img_on' ).style.display = 'block';
       }
-      else if (data.endsWith('NTB1'))
+      else if (data.includes('NTB1'))
       {
         document.getElementById('n1img_off').style.display = 'block';
         document.getElementById('n1img_on' ).style.display = 'none';

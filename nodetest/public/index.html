@@ -13,8 +13,10 @@
 <input type="checkbox" id="light"></p>
 <label for="displayValue">The most recent power reading0 is: </label>
 <input type="textbox" name="powerdisplay0"/>
+<p id='pd0'></p>
 <label for="displayValue">The most recent power reading1 is: </label>
 <input type="textbox" name="powerdisplay1"/>
+<p id='pd1'></p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
 <script>
@@ -31,6 +33,7 @@
   // });
 
   socket.on('serialrec', function (data) { //get button event from client
+    document.getElementById('pd0').innerHTML = data;
     document.getElementsByName('powerdisplay0')[0].value = data; //display any serially received data
   });
 

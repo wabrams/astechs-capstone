@@ -101,7 +101,7 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
     //~ console.log('serial input length: ',data.length);
     console.log('Serial input:' ,newdata);
     //~ console.log('newdata length: ',newdata.length);
-    socket.emit('serialrec',Number(newdata)); //cast serial receive data event
+    socket.emit('serialrec',newdata);
   });
   
 });

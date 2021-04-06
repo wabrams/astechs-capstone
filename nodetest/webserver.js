@@ -96,7 +96,8 @@ io.sockets.on('connection', function (socket) {// WebSocket Connection
   
   //Service Serial Data reception
   parser.on('data', data =>{
-    newdata = data.replace(/\D/g,''); //filter out non-numerical chars. -> fixes weird huge buffer error
+    // newdata = data.replace(/\D/g,''); //filter out non-numerical chars. -> fixes weird huge buffer error
+    newdata = data.replace(/[\W_]+/g,'');
     //~ console.log('serial input:' ,data);
     //~ console.log('serial input length: ',data.length);
     console.log('Serial input:' ,newdata);

@@ -70,6 +70,23 @@ function handler (req,res)
       res.end(text);
     })
   }
+  else if (req.url == "/js/ext/socketio.js")
+  {
+    fs.readFile("js/ext/socketio.js", function (err, text)
+    {
+      res.setHeader("Content-Type", "image/png");
+      res.end(text);
+    })
+  }
+  else if (req.url == "/js/handleio.js")
+  {
+    fs.readFile("js/handleio.js", function (err, text)
+    {
+      res.setHeader("Content-Type", "image/png");
+      res.end(text);
+    })
+  }
+  
 };
 
 io.sockets.on('connection', function (socket) {// WebSocket Connection

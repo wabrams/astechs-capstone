@@ -14,6 +14,7 @@
       padding: 10px;
       text-align: center;
       height: 300px; /* Should be removed. Only for demonstration */
+      border: 2px solid black;
     }
     
     /* Clear floats after the columns */
@@ -34,31 +35,27 @@
   <div class="row">
     <div class="column" style="background-color:#aaa;">
       <h2>Remote</h2>
-      <p>REM-A</p>
+      <p>RCS1</p>
     </div>
     <div class="column" style="background-color:#bbb;">
-      <h2>Node 1</h2>
-      <p>BRD-A</p>
+      <h2>Node #1</h2>
+      <p>NCS1</p>
       <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n1img_on' src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
     <div class="column" style="background-color:#ccc;">
-      <h2>Node 2</h2>
-      <p>BRD-C</p>
+      <h2>Node #2</h2>
+      <p>NTB1</p>
       <img src="/img/node_off.png" width='50' alt="concept outlet">
       <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
-    <div class="column" style="background-color:#ccc;">
-      <h2>Node 3</h2>
-      <p>BRD-D</p>
+    <div class="column" style="background-color:#ddd;">
+      <h2>Node #3</h2>
+      <p>NTB2</p>
       <img src="/img/node_off.png" width='50' alt="concept outlet">
       <img src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
     </div>
   </div>
-
-
-  <p><label for="displayValue">Toggle Node: </label>
-  <input type="checkbox" id="light"></p>
 
   <button id='btn0' type='button'>BRDA BTN0</button>
 
@@ -73,33 +70,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page
-  window.addEventListener("load", function(){ //when page loads
-    var lightbox = document.getElementById("light");
-    lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
-      socket.emit("light", Number(this.checked)); //send button status to server (as 1 or 0)
-    });
-  });
-
-  // socket.on('button', function (data) { //get button event from client
-  //   document.getElementsByName('powerdisplay0')[0].value = data; //display the dummy power on front end
+  // window.addEventListener("load", function(){ //when page loads
+  //   var lightbox = document.getElementById("light");
+  //   lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
+  //     socket.emit("light", Number(this.checked)); //send button status to server (as 1 or 0)
+  //   });
   // });
 
-  socket.on('serialrec', function (data) { //get button event from client
+  socket.on('serialrec', function (data) 
+  {
     data = String(data);
     if (data.startsWith('BRDA'))
     {
-      if (data.startsWith('BRDA 77'))
+      // document.getElementById("btn0").style.background='#aa0000';
+      // document.getElementById("btn0").style.background='#00aa00';
+      if (data.endsWith('NCS1'))
       {
         document.getElementById('n1img_off').style.display = 'none';
-        document.getElementById('n1img_on').style.display = 'block';
+        document.getElementById('n1img_on' ).style.display = 'block';
       }
-        // document.getElementById("btn0").style.background='#aa0000';
-      else
+      else if (data.endsWith('NTB1'))
       {
         document.getElementById('n1img_off').style.display = 'block';
-        document.getElementById('n1img_on').style.display = 'none';
+        document.getElementById('n1img_on' ).style.display = 'none';
       }
-        // document.getElementById("btn0").style.background='#00aa00';
       document.getElementById('pd0').innerHTML = data;
     }
     else if (data.startsWith('BRDB'))

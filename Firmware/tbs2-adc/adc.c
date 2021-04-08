@@ -4,14 +4,14 @@
  *  Created on: Apr 7, 2021
  *      Author: Will
  */
-
 #include "adc.h"
 
 // Init to max ADC clock for Series 1
-#define adcFreq   16000000
+#define adcFreq  16000000 // 16 MHz was the default
 
 volatile int32_t sample;
 volatile int16_t millivolts;
+volatile uint32_t count;
 
 /**************************************************************************//**
  * @brief  Initialize ADC function
@@ -29,11 +29,13 @@ void initADC(void)
   // Modify init structs and initialize
   init.prescale = ADC_PrescaleCalc(adcFreq, 0);
   init.timebase = ADC_TimebaseCalc(0);
+  init.ovsRateSel = adcOvsRateSel4096;
 
-  initSingle.diff       = true; // differential
-  initSingle.reference  = adcRef2V5; // internal 2.5V reference
-  initSingle.resolution = adcRes12Bit; // 12-bit resolution
+  initSingle.diff       = true;        // differential
+  initSingle.reference  = adcRef2V5;   // internal 2.5V reference
+  initSingle.resolution = adcResOVS;
   initSingle.acqTime    = adcAcqTime4; // set acquisition time to meet minimum requirements
+
 
   // Select ADC input. See README for corresponding EXP header pin.
   initSingle.posSel = adcPosSelAPORT2XCH11;
@@ -50,7 +52,7 @@ void initADC(void)
   NVIC_ClearPendingIRQ(ADC0_IRQn);
   NVIC_EnableIRQ(ADC0_IRQn);
 
-  //TODO: move later
+  count = 0;
   ADC_Start(ADC0, adcStartSingle);
 }
 
@@ -64,7 +66,7 @@ void ADC0_IRQHandler(void)
 
   // Calculate input voltage in mV
   millivolts = (sample * 2500) / 4096;
-
+  count += 1;
   // Start next ADC conversion
   ADC_Start(ADC0, adcStartSingle);
 }

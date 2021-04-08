@@ -89,10 +89,19 @@
       showlegend: false,
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor:  "rgba(0,0,0,0)",
-      margin: {l: 0, r: 0, b: 0, t: 0, pad: 4},
+      margin: {l: 0, r: 0, b: 0, t: 10, pad: 4},
   };
 
   Plotly.newPlot('livePlot1', data, layout);
+</script>
+
+<script>
+  function toggleNodeImage(divOn, divOff)
+  {
+    var temp = document.getElementById(divOff).style.display;
+    document.getElementById(divOff).style.display = document.getElementById(divOn).style.display;
+    document.getElementById(divOn ).style.display = temp;
+  }
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
@@ -107,21 +116,15 @@
     {
       if (data.includes('NCS1'))
       {
-        var temp = document.getElementById('n1img_off').style.display;
-        document.getElementById('n1img_off').style.display = document.getElementById('n1img_on').style.display;
-        document.getElementById('n1img_on' ).style.display = temp;
+        toggleNodeImage('n1img_on','n1img_off');
       }
       else if (data.includes('NTB1'))
       {
-        var temp = document.getElementById('n2img_off').style.display;
-        document.getElementById('n2img_off').style.display = document.getElementById('n2img_on').style.display;
-        document.getElementById('n2img_on' ).style.display = temp;
+        toggleNodeImage('n2img_on','n2img_off');
       }
       else if (data.includes('NTB2'))
       {
-        var temp = document.getElementById('n3img_off').style.display;
-        document.getElementById('n3img_off').style.display = document.getElementById('n3img_on').style.display;
-        document.getElementById('n3img_on' ).style.display = temp;
+        toggleNodeImage('n3img_on','n3img_off');
       }
     }
 

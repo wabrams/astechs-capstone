@@ -14,7 +14,7 @@ var trace2 = {
   type: 'scatter'
 };
 
-var data = [trace1];
+var data = [trace1, trace2];
 
 var layout = {
   title: 'Power Consumption',

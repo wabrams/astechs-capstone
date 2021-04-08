@@ -82,7 +82,7 @@ function handler (req,res)
   {
     fs.readFile("js/threadParse.js", function (err, text)
     {
-      res.setHeader("Content-Type", "image/png");
+      res.setHeader("Content-Type", "text/js");
       res.end(text);
     })
   }

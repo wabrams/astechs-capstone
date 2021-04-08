@@ -26,7 +26,16 @@ function parseCommand(data)
     if (data.includes('POWER'))
     {
       var pread = Number(data.substr(data.indexOf('POWER')+6));
-      updateData(pread);
+      updateData1(pread);
+      updatePlot();
+    }
+  }
+  else if (data.startsWith('BRDB'))
+  {
+    if (data.includes('POWER'))
+    {
+      var pread = Number(data.substr(data.indexOf('POWER')+6));
+      updateData2(pread);
       updatePlot();
     }
   }

@@ -1,9 +1,16 @@
 var interval = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-var powdata  = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var powdata1  = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var powdata2  = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var trace1 = {
   x: interval,
-  y: powdata,
+  y: powdata1,
+  type: 'scatter'
+};
+
+var trace2 = {
+  x: interval,
+  y: powdata1,
   type: 'scatter'
 };
 
@@ -19,21 +26,29 @@ var layout = {
 
 Plotly.newPlot('livePlot1', data, layout);
 
-function updateData(powread)
+function updateData1(powread)
 {
   for (let i = 0; i < 10 - 1; i++)
-    powdata[i] = powdata[i + 1];
-  powdata[10 - 1] = powread;
+    powdata1[i] = powdata1[i + 1];
+  powdata1[10 - 1] = powread;
+}
+
+function updateData2(powread)
+{
+  for (let i = 0; i < 10 - 1; i++)
+    powdata2[i] = powdata2[i + 1];
+  powdata2[10 - 1] = powread;
 }
 
 function updatePlot()
 {
-  data[0]['y'] = powdata;
+  data[0]['y'] = powdata1;
+  data[0]['y'] = powdata2;
   Plotly.redraw('livePlot1');
 }
 
-console.log(powdata);
+console.log(powdata1);
 updateData(1);
 updateData(2);
 updateData(3);
-console.log(powdata);
+console.log(powdata1);

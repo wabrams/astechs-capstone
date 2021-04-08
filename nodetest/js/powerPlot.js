@@ -21,7 +21,7 @@ var layout = {
   showlegend: false,
   paper_bgcolor: "rgba(0,0,0,0)",
   plot_bgcolor:  "rgba(0,0,0,0)",
-  margin: {l: 0, r: 0, b: 0, t: 10, pad: 4},
+  // margin: {l: 0, r: 0, b: 0, t: 10, pad: 4},
 };
 
 Plotly.newPlot('livePlot1', data, layout);

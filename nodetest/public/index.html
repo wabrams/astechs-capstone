@@ -16,6 +16,7 @@
       text-align: center;
       /* height: 300px; */
       border: 2px solid black;
+      background-color:#ddd;
     }
     
     /* Clear floats after the columns */
@@ -39,12 +40,12 @@
   </div>
 
   <div class="row">
-    <div class="column" style="background-color:#aaa;">
+    <div class="column">
       <h2>Remote</h2>
       <p>RCS1</p>
       <p>Custom PCB running Thread, the remote control for the system!</p>
     </div>
-    <div class="column" style="background-color:#bbb;">
+    <div class="column">
       <h2>Node #1</h2>
       <p>NCS1</p>
       <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
@@ -52,14 +53,14 @@
       <p>Custom PCB running Thread controlling power outlet!</p>
       <div id='livePlot1'></div>
     </div>
-    <div class="column" style="background-color:#ccc;">
+    <div class="column">
       <h2>Node #2</h2>
       <p>NTB1</p>
       <img id='n2img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n2img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
       <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
     </div>
-    <div class="column" style="background-color:#ddd;">
+    <div class="column">
       <h2>Node #3</h2>
       <p>NTB2</p>
       <img id='n3img_off' src="/img/node_off.png" width='50' alt="concept outlet">
@@ -87,6 +88,7 @@
       title: 'Power Consumption',
       showlegend: false,
       paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: '#cccccc'
       margin: {
         l: 0,
         r: 0,

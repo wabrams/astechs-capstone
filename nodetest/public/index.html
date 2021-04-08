@@ -76,8 +76,8 @@
 
 <script>
   var trace1 = {
-      x: [ 1,  2,  3],
-      y: [90, 40, 60],
+      x: [ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10],
+      y: [0, 750, 1500, 750, 0, -750, -1500, -750, 0, 750],
       type: 'scatter'
   };
 
@@ -90,6 +90,7 @@
 
   Plotly.newPlot('livePlot1', data, layout);
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page

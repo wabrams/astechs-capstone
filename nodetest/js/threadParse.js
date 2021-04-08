@@ -21,4 +21,13 @@ function parseCommand(data)
       toggleNodeImage('n3img_on','n3img_off');
     }
   }
+  else if (data.startsWith('BRDA'))
+  {
+    if (data.includes('POWER'))
+    {
+      var pread = Number(data.substr(data.indexOf('POWER')+6));
+      updateData(pread);
+      updatePlot();
+    }
+  }
 }

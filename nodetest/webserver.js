@@ -86,6 +86,14 @@ function handler (req,res)
       res.end(text);
     })
   }
+  else if (req.url == "/js/powerPlot.js")
+  {
+    fs.readFile("js/powerPlot.js", function (err, text)
+    {
+      res.setHeader("Content-Type", "text/js");
+      res.end(text);
+    })
+  }
 };
 
 io.sockets.on('connection', function (socket) {// WebSocket Connection

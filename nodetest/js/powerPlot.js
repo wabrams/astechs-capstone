@@ -46,9 +46,3 @@ function updatePlot()
   data[0]['y'] = powdata2;
   Plotly.redraw('livePlot1');
 }
-
-console.log(powdata1);
-updateData(1);
-updateData(2);
-updateData(3);
-console.log(powdata1);

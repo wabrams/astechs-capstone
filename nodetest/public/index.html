@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>AsTechs WebUI</title>
+  <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
   <style>
     * {
       box-sizing: border-box;
@@ -49,6 +50,7 @@
       <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
       <img id='n1img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
       <p>Custom PCB running Thread controlling power outlet!</p>
+      <div id='livePlot1'></div>
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Node #2</h2>
@@ -72,6 +74,22 @@
 
   <p>Last Received Thread Message: <span id='lastmsg'></span></p>
 
+<script>
+  var trace1 = {
+      x: [ 1,  2,  3],
+      y: [90, 40, 60],
+      type: 'scatter'
+  };
+
+  var data = [trace1];
+
+  var layout = {
+      title: 'Power Consumption',
+      showlegend: false
+  };
+
+  Plotly.newPlot('livePlot1', data, layout);
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page

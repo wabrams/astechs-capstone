@@ -86,7 +86,14 @@
   var layout = {
       title: 'Power Consumption',
       showlegend: false,
-      paper_bgcolor: "rgba(0,0,0,0)"
+      paper_bgcolor: "rgba(0,0,0,0)",
+      margin: {
+        l: 0,
+        r: 0,
+        b: 100,
+        t: 100,
+        pad: 4
+      },
   };
 
   Plotly.newPlot('livePlot1', data, layout);

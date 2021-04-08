@@ -95,42 +95,17 @@
   Plotly.newPlot('livePlot1', data, layout);
 </script>
 
-<script>
-  function toggleNodeImage(divOn, divOff)
-  {
-    var temp = document.getElementById(divOff).style.display;
-    document.getElementById(divOff).style.display = document.getElementById(divOn).style.display;
-    document.getElementById(divOn ).style.display = temp;
-  }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script> <!-- include socket.io client side script -->
+<script src='/js/threadParse.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page
 
   socket.on('serialrec', function (data) 
   {
     data = String(data);
-
-    if (data.startsWith('RCS1'))
-    {
-      if (data.includes('NCS1'))
-      {
-        toggleNodeImage('n1img_on','n1img_off');
-      }
-      else if (data.includes('NTB1'))
-      {
-        toggleNodeImage('n2img_on','n2img_off');
-      }
-      else if (data.includes('NTB2'))
-      {
-        toggleNodeImage('n3img_on','n3img_off');
-      }
-    }
-
+    parseCommand(data);
     document.getElementById('lastmsg').innerHTML = data;
   });
-
 </script>
 
 </body>

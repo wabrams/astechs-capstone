@@ -78,6 +78,14 @@ function handler (req,res)
       res.end(text);
     })
   }
+  else if (req.url == "/js/threadParse.js")
+  {
+    fs.readFile("js/threadParse.js", function (err, text)
+    {
+      res.setHeader("Content-Type", "image/png");
+      res.end(text);
+    })
+  }
 };
 
 io.sockets.on('connection', function (socket) {// WebSocket Connection

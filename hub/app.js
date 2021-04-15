@@ -10,16 +10,10 @@ var io = require('socket.io')(server)
 // File Setup
 var fs = require('fs'); //require filesystem module
 
-// // Serial Port Setup
-// const SerialPort = require('serialport');
-// const Readline = require('@serialport/parser-readline');
-// const port = new SerialPort('/dev/ttyACM0', { baudRate: 9600 });
-// const parser = port.pipe(new Readline({ delimiter: '\n' }));
-
 server.listen(8080); 
 console.log('[SETUP]: listening on *:8080')
 
-//Create Server
+// Create Server
 function server_handler (req, res)
 {
   console.log("[REQ]: " + req.url);
@@ -107,4 +101,35 @@ io.on('connection', (socket) =>
   });
 });
 
-// Serial Reading
+// Share Reading
+const dir = 'share/p2n/';
+setInterval(() => 
+{
+  fs.readdir(dir, (err, files) => 
+  {
+    if (err) 
+    {
+        throw err;
+    }
+
+    files.forEach(file => 
+    {
+      console.log('[FILE]: ' + file);
+      fs.readFile(file, function(err, data)
+      {
+        if (err)
+        {
+          throw err;
+        }
+        console.log('[TEXT]: ' + data)
+      });
+      fs.unlink('file.txt', (err) => 
+      {
+        if (err) 
+        {
+            throw err;
+        }
+      });
+    });
+  });
+}, 1000)

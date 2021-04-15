@@ -1,45 +1,32 @@
-## audio_command_parse
-# AsTechs Spring 2021
-# used to compare audio commands over a rasberry pi
+#!/usr/bin/python3
 
-
-#################################################################################################################
-################
-################ This should all be easy to install e.g. pip install vosk...
-################
-#################################################################################################################
-
-# following or for audio interpreting
+# voice processing, file manipulation, etc
 from vosk import Model, KaldiRecognizer, SetLogLevel
 import sys
 import os
-import glob
 import wave
 import subprocess
 import json
-
-# nice libraries to have
+# the essentials :)
 from scipy import signal
 import matplotlib.pyplot as plt
 import math as math
 import numpy as np
-
-# serial tools...
+# pyserial, logging, etc
 import serial
 import serial.tools.list_ports
+import glob
 import platform
 from datetime import datetime
-
 
 ###############################################
 #  Converting VOX encoded data to 16 bit PCM  #
 ###############################################
 
-
 # VOX decription is adapted from code written by IvanEvan on Github
 # https://github.com/IvanEvan/Vox2Wav-by-python
 
-# table of  quantizer step size
+# table of quantizer step size
 StepSizeTable = [16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41,
                  45, 50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173,
                  190, 209, 230, 253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658,
@@ -47,7 +34,6 @@ StepSizeTable = [16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41,
 
 # another conversion table
 IndexTable = [-1, -1, -1, -1, 2, 4, 6, 8]
-
 
 def ADPCM_Encode(sample):
     global index
@@ -193,7 +179,7 @@ def decodeTBS2(list_8bit):
         tmpDeS16_1 = ADPCM_Decode(sample_4bit_1)
 
         list_16bit.extend([tmpDeS16_0, tmpDeS16_1])
-        
+
     # decoded data
     return list_16bit
 
@@ -202,7 +188,6 @@ def decodeTBS2(list_8bit):
 # name - name of .wav file (don't include .wav
 def toWav(list_16bit, name):
     wav_file = wave.open(name + '.wav', 'wb')
-
     # configure channel number, quantization size, and sample rate
     wav_file.setnchannels(1)
     wav_file.setsampwidth(2)
@@ -210,28 +195,15 @@ def toWav(list_16bit, name):
     # converts data to binary data and writes it to a file
     wav_file.writeframes(list_16bit.tobytes())
     wav_file.close()
-    
-    
-    
+
 #########################################################   
 #  functions for converting .wav to strings using Vosk  #
 #########################################################
 
 
 # convert audio from a wavefile e.g. "example.wav" to 
-def wav2str(filename):
-    sample_rate=16000
-    # this should be the name
-    
-    #######################################################################################################################
-    ############################# Make sure this file name is updated
-    ############################# Download from https://alphacephei.com/vosk/models and unzip into a folder 
-    ############################# that matches foldername below (choose vosk-model-small-en-us-0.15).
-    ############################# Make sure the unzipped folder branches out into subdirectories
-    ############################# not something like model -> model -> actual subdirecteries.
-    #######################################################################################################################
-    
-    foldername = "voskmodel"
+def wav2str(filename, sample_rate = 16000, foldername = "voskmodel"):
+    # this is the name of the model folder
     model = Model(foldername)
     rec = KaldiRecognizer(model, sample_rate)
 
@@ -240,9 +212,8 @@ def wav2str(filename):
         print ("Audio file must be WAV format mono PCM.")
         exit (1)
 
-
     results = []
-    subs = []
+    subs    = []
     while True:
         data = wf.readframes(4000)
         if len(data) == 0:
@@ -259,28 +230,25 @@ def wav2str(filename):
         words = jres['result']
         for j in range(len(words)):
             Strings.append(words[j]['word'])
-        
     return Strings
 
 #######################################
 #  Methods of comparing Vosk results  #
 #######################################
 
-
-
 # to compare two lists, regular edit distance...
 def edit_dist(A, B):
-    if len(A) <= len(B):                 # convenient notation to organize
+    if len(A) <= len(B):
         shorter,longer = A,B
     else:
         shorter,longer = B,A
 
     a = np.zeros((2,len(shorter) + 1), dtype=int) # matrix of values
-    
+
     # get the first row
     for i in range(len(shorter)+1):
         a[0][i] = i                      # 0th row
-    
+
     # get the rest of the rows
     for j in range(1,len(longer)+1):
         a[1][0] = j                          # first column
@@ -289,7 +257,7 @@ def edit_dist(A, B):
                            a[0][i] + 1,
                            a[1][i-1] + 1])
         a[0] = a[1]                          # push row back
-    
+
     return(a[0][len(shorter)])           # return last value
 
 # a method for comparing two lists of strings
@@ -299,14 +267,13 @@ def edit_dist(A, B):
 def list_compare(L1,L2):
     if not len(L1) and not len(L2):
         return 0
-    
+
     D = np.zeros((len(L1)+1,len(L2)+1))
     for i in range(len(L1)):
         D[i+1,0] = i+1
     for j in range(len(L2)):
         D[0,j+1] = j+1
-        
-        
+
     for i in range(1,len(L1)+1):
         for j in range(1,len(L2)+1):
             D[i,j] = min([D[i-1][j-1] + edit_dist(L1[i-1],L2[j-1])/max(len(L1[i-1]),len(L2[j-1])),
@@ -318,46 +285,52 @@ def list_compare(L1,L2):
 # Input - input command to be interpreted
 # Commands - list of available commands through vosk results
 # Threshold - similarity required to be acceptable
-def Select_Command(Input, Commands, Threshold = 0.4):
+def select_command(text, commands, threshold = 0.4):
     argMax, Max = -1, 0
-    for i in range(len(Commands)):
+    for i in range(len(commands)):
         Similarity = 0
-        for j in range(len(Commands[i])):
-            Similarity = Similarity + (1-list_compare(Input,Commands[i][j]))
-        Similarity = Similarity / len(Commands[i])
-        if Similarity > Max and Similarity > Threshold:
+        for j in range(len(commands[i])):
+            Similarity = Similarity + (1-list_compare(text, commands[i][j]))
+        Similarity = Similarity / len(commands[i])
+        if Similarity > Max and Similarity > threshold:
             argMax, Max = i, Similarity
     return argMax
-    
 
-# list of new commands. Normally we would do this over Thread 
-# but I am doing this manually with nothing under my sleeve 
-# (first run through) in order to make the test faster
-
-# 'test command one' 
-Command_One = [['just', 'one'],
-              ['test', 'one'],
-              ['test', 'command', 'one'],
-              ['test', 'to', 'man', 'one'],
-              ['test', 'man', 'one']]
-# 'some long sentence'
-Command_Two = [['some', 'one', 'sentence'],
-              ['some', 'sentence'],
-              ['the', 'sentence'],
-              ['some', 'long', 'sentence'],
-              ['some', 'sentence']]
-# 'dog' - corner case short command
-Command_Three = [['dog'], ['dog'],
-                [], [],
-                ['talk']]
-# 'test command four' - corner case similar commands
-Command_Four = [['test', 'command'],
-               ['command', 'for'],
-               ['test', 'command', 'for'],
-               ['test', 'in', 'for'],
-               ['just', 'coming']] # the last one makes absolutely no sense but there yah go
-
-Commands = [Command_One,Command_Two,Command_Three,Command_Four]
+# CMD1: 'test command one'
+cmd1 = [
+  ['test', 'command', 'one'],
+  ['command', 'one'],
+  ['test', 'command', 'one'],
+  ['test', 'command', 'one'],
+  ['that\'s', 'command', 'one']
+]
+# CMD2: 'some long sentence'
+cmd2 = [
+  ['some', 'one', 'sentence'],
+  ['some', 'sentence'],
+  ['the', 'sentence'],
+  ['some', 'long', 'sentence'],
+  ['some', 'sentence']
+]
+# CMD3: 'dog' (corner case short command)
+cmd3 = [
+  ['dog'],
+  ['dog'],
+  ['dog'],
+  [],
+  ['talk']
+]
+# CMD4: 'test command four' (corner case similar commands)
+cmd4 = [
+  ['test', 'command'],
+  ['command', 'for'],
+  ['test', 'command', 'for'],
+  ['test', 'command', 'for'],
+  ['test', 'command', 'for']
+]
+# cmds: list of all command lists
+#   these commands are pre-trained to save time during the demo
+cmds = [cmd1, cmd2, cmd3, cmd4]
 
 #####################
 #  Serial Commands  #
@@ -365,21 +338,21 @@ Commands = [Command_One,Command_Two,Command_Three,Command_Four]
 
 def printLog(*args, **kwargs):
     stamp = str(datetime.now())
-    print("[" + stamp + "]", *args)
+    print('[' + stamp + ']', *args)
 
 def errorLog(*args, **kwargs):
     stamp = str(datetime.now())
-    print("[" + stamp + "]", *args)
+    print('[' + stamp + ']', *args)
 
 def listPorts():
     devOS = platform.system()
-    printLog("Detected", devOS, "Computer")
+    printLog('Detected', devOS, 'Computer')
     ports = []
-    if devOS == "Windows":
+    if devOS == 'Windows':
         ports = serial.tools.list_ports.comports()
-    elif devOS == "Linux":
+    elif devOS == 'Linux':
         ports = glob.glob('/dev/tty[A-Za-z]*')
-    printLog("Listing all Serial Ports:")
+    printLog('Listing all Serial Ports:')
     for p in ports:
         printLog(p)
 
@@ -387,54 +360,70 @@ def setupSerial():
     listPorts()
     while True:
         try:
-            port = input("enter port:")
+            port = input('\tenter port: ')
             s = serial.Serial(port)
             s.baudrate = 115200
             s.bytesize = serial.EIGHTBITS
             s.parity = serial.PARITY_NONE
             s.stopbits = serial.STOPBITS_ONE
-            printLog("Serial Port open on", port.upper(), "for EFR32BG22")
+            printLog('Serial Port open on', port.upper(), 'for EFR32MG12')
             return s
         except serial.SerialException:
-            errorLog("Invalid Serial Port, please try again!")
+            errorLog('Invalid Serial Port, please try again!')
             continue
 
-#######################################################################################################
-############################################   MAIN CODE   ############################################
-#######################################################################################################
+################
+#  Main Loop   #
+################
 
-ser = setupSerial()
+def main(timeout):
+    ser = setupSerial()
 
-while(True):
-    # Take input from serial
+    while(True):
+        res = ser.readline()
+        share = False
 
-        
-    if b'st' in ser.readline():
-        ser.timeout = 5
-        
-        print('start frame recieved')
-        res = ser.read(16000*5)
-    
-        # process data
-        # from Vox to PCM
-        RawPCM = np.array(decodeTBS2(res),dtype=np.int16)[1500:]
-        # save as wav file with
-        filename = 'input_wav'
-        toWav(RawPCM,filename)
-        # gather list of strings from Vox
-        String_list = wav2str(filename + '.wav')
-        print(String_list)
+        # audio data
+        if b'st' in res:
+            # read until BTN timeout
+            ser.timeout = timeout
+            printLog('Reading from Serial Port!')
+            res = ser.read(16000*timeout)
 
-        # Anticipated command by comparing to other vosk results
-        # then print result to serial
-        if String_list :
-            index = Select_Command(String_list,Commands)
-            result = str(index) + '\n'
-            ser.write(result.encode())
-        else: # result was [] empty list
-            result = str(-1) + '\n'
-            ser.write(result.encode())
+            # process data from Vox to PCM
+            printLog('Converting VOX to PCM')
+            RawPCM = np.array(decodeTBS2(res),dtype=np.int16)[1500:]
+
+            # save as wav file with
+            printLog('Creating .WAV File to Parse')
+            filename = 'input_wav'
+            toWav(RawPCM, filename)
+
+            # gather list of strings from Vox
+            printLog('Converting Audio to Text')
+            parsed_text = wav2str(filename + '.wav')
+            printLog('Parsed Text:\n\t', parsed_text)
+
+            # anticipated command by comparing to other vosk results
+            printLog('Matching Text against Commands')
+            result = '-1\n'
+            if parsed_text:
+                index = select_command(parsed_text, cmds) + 1
+                if index > 0:
+                    result = str(index) + '\n'
+            printLog('Matched to CMD#', result)
+            share = True
+            res = result # TODO: check command dict for actual result
+            ser.timeout = 0
         
-        print(int(result)+1)
-        
-        ser.timeout = 0
+        # else:
+            # res = ser.readline()
+        if share: # TODO: could replace share wiht a msg variable, fmsg = msg and only do this if MSG != ''
+            fname = 'share/p2n/' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.txt'
+            fmsg  = res
+            fnew = open(fname, 'w')
+            fnew.write(fmsg)
+            fnew.close()
+
+if __name__ == '__main__':
+    main(timeout = 5)

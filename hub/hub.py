@@ -378,6 +378,8 @@ def listPorts():
     ports = []
     if devOS == "Windows":
         ports = serial.tools.list_ports.comports()
+    elif devOs == "Linux":
+        ports = glob.glob('/dev/tty[A-Za-z]*')
     printLog("Listing all Serial Ports:")
     for p in ports:
         printLog(p)

@@ -418,8 +418,11 @@ def main(timeout):
             res = cmds_map[index]
             ser.timeout = 0
         
-        # else:
-            # res = ser.readline()
+        else:
+            res = res.decode().strip()
+            printLog('INP: ', res)
+            share = True
+
         if share: # TODO: could replace share wiht a msg variable, fmsg = msg and only do this if MSG != ''
             fname = 'share/p2n/' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.txt'
             fmsg  = res

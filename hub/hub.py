@@ -331,6 +331,8 @@ cmd4 = [
 # cmds: list of all command lists
 #   these commands are pre-trained to save time during the demo
 cmds = [cmd1, cmd2, cmd3, cmd4]
+cmds_map = {0: 'UNREC AUDIO CMD', 1: 'REMT1 NODE1 ON', 2: 'REMT1 NODE1 OFF', 
+            3: 'REMT1 NODE1 TOG', 4: 'REMT1 NODE2 TOG'}
 
 #####################
 #  Serial Commands  #
@@ -413,7 +415,7 @@ def main(timeout):
                     result = str(index) + '\n'
             printLog('Matched to CMD#', result)
             share = True
-            res = result # TODO: check command dict for actual result
+            res = cmds_map[index]
             ser.timeout = 0
         
         # else:

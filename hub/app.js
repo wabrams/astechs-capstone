@@ -84,7 +84,7 @@ function server_handler (req, res)
   }
 };
 
-var count = 0;
+// var count = 0;
 // WebSocket Connection
 io.on('connection', (socket) => 
 {
@@ -93,12 +93,12 @@ io.on('connection', (socket) =>
   {
     console.log('[SIO] a user disconnected');
   });
-  socket.on('updateReq', () => 
-  {
-    count += 1;
-    console.log('[SIO]: update request received');
-    io.emit('updateRes', count);
-  });
+  // socket.on('updateReq', () => 
+  // {
+  //   count += 1;
+  //   console.log('[SIO]: update request received');
+  //   io.emit('updateRes', count);
+  // });
 
 });
 
@@ -123,7 +123,7 @@ setInterval(() =>
           throw err;
         }
         console.log('[TEXT]: ' + data);
-        io.emit('updateRes', data[0]);
+        io.emit('threadMsg', String.fromCharCode.apply(String, new Uint8Array(data)));
         fs.unlink((dir + file), (err) => 
         {
           if (err) 

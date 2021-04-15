@@ -50,7 +50,7 @@
   <!-- <button id='btn0' type='button'>BRDA BTN0</button>
   document.getElementById("btn0").style.background='#aa0000';
   document.getElementById("btn0").style.background='#00aa00'; -->
-  <button id='btn' onclick="btnClick()">Click me</button> 
+  <!-- <button id='btn' onclick="btnClick()">Click me</button>  -->
 
   <p>Last Received Thread Message: <span id='lastmsg'></span></p>
   <div id='livePlot1'></div>
@@ -125,21 +125,46 @@
         break;
     }
   }
+
+  function updateNodeState(num, state)
+  {
+    if (state)
+      turnNodeOn(num);
+    else
+      turnNodeOff(num);
+  }
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page
   
-  function btnClick() 
-  {
-      socket.emit('updateReq');
-  };
+  // function btnClick() 
+  // {
+  //     socket.emit('updateReq');
+  // };
 
-  socket.on('updateRes', function(count) 
+  socket.on('threadMsg', function(msg) 
   {
-    document.getElementById('lastmsg').innerHTML = count;
+    document.getElementById('lastmsg').innerHTML = msg;
+
+    if (msg == 'REMT1 NODE1 ON')
+      turnNodeOn(1);
+    else if (msg == 'REMT1 NODE1 OFF')
+      turnNodeOff(1);
+    else if (msg == 'REMT1 NODE1 TOG')
+      updateNodeState(1, !node1_on);
+    else if (msg == 'REMT1 NODE2 TOG')
+      updateNodeState(2, !node2_on);
   });
+
+  // socket.on('updateResStatus', function(n1, n2, n3) 
+  // {
+  //   updateNodeState(1, n1);
+  //   updateNodeState(2, n2);
+  //   updateNodeState(3, n3);
+  //   document.getElementById('lastmsg').innerHTML = count;
+  // });
 </script>
 
 </body>

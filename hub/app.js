@@ -99,6 +99,7 @@ io.on('connection', (socket) =>
     console.log('[SIO]: update request received');
     io.emit('updateRes', count);
   });
+
 });
 
 // Share Reading
@@ -121,15 +122,16 @@ setInterval(() =>
         {
           throw err;
         }
-        console.log('[TEXT]: ' + data)
-      });
-      fs.unlink((dir + file), (err) => 
-      {
-        if (err) 
+        console.log('[TEXT]: ' + data);
+        io.emit('updateRes', data[0]);
+        fs.unlink((dir + file), (err) => 
         {
-            throw err;
-        }
-      });
+          if (err) 
+          {
+              throw err;
+          }
+        });
+      });      
     });
   });
 }, 1000)

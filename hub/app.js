@@ -114,8 +114,8 @@ setInterval(() =>
 
     files.forEach(file => 
     {
-      console.log('[FILE]: ' + file);
-      fs.readFile(file, function(err, data)
+      console.log('[FILE]: ' + (dir + file));
+      fs.readFile((dir + file), function(err, data)
       {
         if (err)
         {
@@ -123,7 +123,7 @@ setInterval(() =>
         }
         console.log('[TEXT]: ' + data)
       });
-      fs.unlink('file.txt', (err) => 
+      fs.unlink((dir + file), (err) => 
       {
         if (err) 
         {

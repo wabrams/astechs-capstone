@@ -32,7 +32,7 @@ function handler (req,res)
 
   if (req.url == '/index.html' || req.url == "/" || req.url == "/:")
   {
-    fs.readFile(__dirname + '/public/index.html', function(err, text)
+    fs.readFile(__dirname + '/html/index.html', function(err, text)
     {
       res.setHeader("Content-Type", "text/html");
       res.end(text);

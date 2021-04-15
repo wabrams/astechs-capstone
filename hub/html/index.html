@@ -3,29 +3,7 @@
 <head>
   <title>AsTechs WebUI</title>
   <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    
-    /* Create four equal columns that floats next to each other */
-    .column {
-      float: left;
-      width: 25%;
-      padding: 10px;
-      text-align: center;
-      height: 300px;
-      border: 2px solid black;
-      background-color:#ddd;
-    }
-    
-    /* Clear floats after the columns */
-    .row:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-    </style>
+  <link rel="stylesheet" href="/css/basic.css">
 </head>
 
 <body>
@@ -71,21 +49,25 @@
   <!-- <button id='btn0' type='button'>BRDA BTN0</button>
   document.getElementById("btn0").style.background='#aa0000';
   document.getElementById("btn0").style.background='#00aa00'; -->
+  <button id='btn' onclick="btnClick()">Click me</button> 
 
   <p>Last Received Thread Message: <span id='lastmsg'></span></p>
   <div id='livePlot1'></div>
 
 <script src='/js/powerPlot.js'></script>
 <script src='/js/threadParse.js'></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 <script>
   var socket = io(); //load socket.io-client and connect to the host that serves the page
-
-  socket.on('serialrec', function (data) 
+  
+  function btnClick() 
   {
-    data = String(data);
-    parseCommand(data);
-    document.getElementById('lastmsg').innerHTML = data;
+      socket.emit('updateReq');
+  };
+
+  socket.on('updateRes', function(count) {
+    document.getElementById('lastmsg') = count;
   });
 </script>
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>AsTechs WebUI</title>
   <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
   <link rel="stylesheet" href="/css/basic.css">
@@ -54,8 +55,77 @@
   <p>Last Received Thread Message: <span id='lastmsg'></span></p>
   <div id='livePlot1'></div>
 
-<script src='/js/powerPlot.js'></script>
-<script src='/js/threadParse.js'></script>
+<!-- <script src='/js/powerPlot.js'></script> -->
+<!-- <script src='/js/threadParse.js'></script> -->
+
+<script>
+  var node1_on = false;
+  var node2_on = false;
+  var node3_on = false;
+
+  function toggleNodeImage(divOn, divOff)
+  {
+    var temp = document.getElementById(divOff).style.display;
+    document.getElementById(divOff).style.display = document.getElementById(divOn).style.display;
+    document.getElementById(divOn ).style.display = temp;
+  }
+
+  function turnNodeOn(num)
+  {
+    switch(num)
+    {
+      case 1:
+        if (!node1_on)
+        {
+          node1_on = true;
+          toggleNodeImage('n1img_off', 'n1img_on');
+        }
+        break;
+      case 2:
+        if (!node2_on)
+        {
+          node2_on = true;
+          toggleNodeImage('n2img_off', 'n2img_on');
+        }
+        break;
+      case 3:
+        if (!node3_on)
+        {
+          node3_on = true;
+          toggleNodeImage('n3img_off', 'n3img_on');
+        }
+        break;
+    }
+  }
+
+  function turnNodeOff(num)
+  {
+    switch(num)
+    {
+      case 1:
+        if (node1_on)
+        {
+          node1_on = false;
+          toggleNodeImage('n1img_off', 'n1img_on');
+        }
+        break;
+      case 2:
+        if (node2_on)
+        {
+          node2_on = false;
+          toggleNodeImage('n2img_off', 'n2img_on');
+        }
+        break;
+      case 3:
+        if (node3_on)
+        {
+          node3_on = false;
+          toggleNodeImage('n3img_off', 'n3img_on');
+        }
+        break;
+    }
+  }
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 <script>
@@ -66,8 +136,9 @@
       socket.emit('updateReq');
   };
 
-  socket.on('updateRes', function(count) {
-    document.getElementById('lastmsg') = count;
+  socket.on('updateRes', function(count) 
+  {
+    document.getElementById('lastmsg').innerHTML = count;
   });
 </script>
 

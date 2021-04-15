@@ -20,11 +20,10 @@ server.listen(8080);
 console.log('[SETUP]: listening on *:8080')
 
 //Create Server
-var count = 0;
 function server_handler (req, res)
 {
   console.log("[REQ]: " + req.url);
-  count += 1;
+
   if (req.url == '/index.html' || req.url == "/" || req.url == "/:")
   {
     fs.readFile(__dirname + '/html/index.html', function(err, text)
@@ -91,17 +90,21 @@ function server_handler (req, res)
   }
 };
 
+var count = 0;
 // WebSocket Connection
 io.on('connection', (socket) => 
 {
-  console.log('a user connected');
+  console.log('[SIO]: a user connected');
   socket.on('disconnect', () => 
   {
-    console.log('user disconnected');
+    console.log('[SIO] a user disconnected');
   });
   socket.on('updateReq', () => 
   {
+    count += 1;
     console.log('[SIO]: update request received');
     io.emit('updateRes', count);
   });
 });
+
+// Serial Reading

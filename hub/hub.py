@@ -230,7 +230,7 @@ def wav2str(filename):
     ############################# not something like model -> model -> actual subdirecteries.
     #######################################################################################################################
     
-    foldername = "model"
+    foldername = "voskmodel"
     model = Model(foldername)
     rec = KaldiRecognizer(model, sample_rate)
 
@@ -359,8 +359,6 @@ Command_Four = [['test', 'command'],
                ['just', 'coming']] # the last one makes absolutely no sense but there yah go
 
 Commands = [Command_One,Command_Two,Command_Three,Command_Four]
-
-
 
 #####################
 #  Serial Commands  #

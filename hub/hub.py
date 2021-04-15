@@ -13,6 +13,7 @@
 from vosk import Model, KaldiRecognizer, SetLogLevel
 import sys
 import os
+import glob
 import wave
 import subprocess
 import json
@@ -333,8 +334,6 @@ def Select_Command(Input, Commands, Threshold = 0.4):
 # but I am doing this manually with nothing under my sleeve 
 # (first run through) in order to make the test faster
 
-# these are preprogrammed because they take 30-60 min to setup manually
-
 # 'test command one' 
 Command_One = [['just', 'one'],
               ['test', 'one'],
@@ -378,7 +377,7 @@ def listPorts():
     ports = []
     if devOS == "Windows":
         ports = serial.tools.list_ports.comports()
-    elif devOs == "Linux":
+    elif devOS == "Linux":
         ports = glob.glob('/dev/tty[A-Za-z]*')
     printLog("Listing all Serial Ports:")
     for p in ports:
@@ -436,6 +435,6 @@ while(True):
             result = str(-1) + '\n'
             ser.write(result.encode())
         
-        print(result+1)
+        print(int(result)+1)
         
         ser.timeout = 0

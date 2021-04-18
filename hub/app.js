@@ -26,6 +26,14 @@ function server_handler (req, res)
       res.end(text);
     });
   }
+  else if (req.url == '/about.html')
+  {
+	fs.readFile(__dirname + '/html/about.html', function(err, text)
+    {
+      res.setHeader("Content-Type", "text/html");
+      res.end(text);
+    }); 
+  }
   else if (req.url == '/css/basic.css')
   {
     fs.readFile("css/basic.css", function (err, text)

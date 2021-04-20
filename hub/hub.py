@@ -411,7 +411,7 @@ def main(timeout):
             # anticipated command by comparing to other vosk results
             printLog('Matching Text against Commands')
             result = '-1\n'
-            index = -1
+            index = 0
             if parsed_text:
                 index = select_command(parsed_text, cmds) + 1
                 if index > 0:

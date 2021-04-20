@@ -430,7 +430,7 @@ def main(timeout):
                 pass
 
         if share:
-            printLog('INP: ', res)
+            printLog('[P2N]: ', res)
             fname = 'share/p2n/' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.txt'
             fnew = open(fname, 'w')
             fnew.write(res)
@@ -439,10 +439,10 @@ def main(timeout):
         # read files if any and send to serial
         dir = 'share/n2p/'
         for fname in os.listdir(dir):
-            print("filename: " + fname)
+            print("[N2P]: file " + fname)
             fp = open(dir+fname)
             dt = fp.read()
-            print("data: " + dt)
+            print("[N2P]: read " + dt)
             ser.write(('hub ' + dt).encode('utf-8'))
             fp.close()
             os.remove(dir+fname)

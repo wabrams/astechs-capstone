@@ -331,8 +331,8 @@ cmd4 = [
 # cmds: list of all command lists
 #   these commands are pre-trained to save time during the demo
 cmds = [cmd1, cmd2, cmd3, cmd4]
-cmds_map = {0: 'UNREC AUDIO CMD', 1: 'REMT1 NODE1 ON', 2: 'REMT1 NODE1 OFF', 
-            3: 'REMT1 NODE1 TOG', 4: 'REMT1 NODE2 TOG'}
+cmds_map = {0: 'UNREC AUDIO CMD\n', 1: 'NODE1 ON\n', 2: 'NODE1 OFF\n', 
+            3: 'NODE1 TOG\n', 4: 'NODE2 TOG\n'}
 
 #####################
 #  Serial Commands  #
@@ -417,9 +417,12 @@ def main(timeout):
                 if index > 0:
                     result = str(index) + '\n'
             printLog('Matched to CMD#', result)
-            res = "AUDIO " + cmds_map[index]
+            # res = "AUDIO " + cmds_map[index]
+            res = cmds_map[index]
             share = True
             ser.timeout = 0
+            # N2P BYPASS
+            ser.write(res)
         
         else:
             try:
@@ -436,17 +439,18 @@ def main(timeout):
             fnew = open(fname, 'w')
             fnew.write(res)
             fnew.close()
-
-        # read files if any and send to serial
-        dir = 'share/n2p/'
-        for fname in os.listdir(dir):
-            printLog("[N2P]: file " + fname)
-            fp = open(dir+fname)
-            dt = fp.read()
-            printLog("[N2P]: read " + dt)
-            ser.write(('hub ' + dt).encode('utf-8'))
-            fp.close()
-            os.remove(dir+fname)
+        
+        # N2P UNUSED
+        # # read files if any and send to serial
+        # dir = 'share/n2p/'
+        # for fname in os.listdir(dir):
+        #     printLog("[N2P]: file " + fname)
+        #     fp = open(dir+fname)
+        #     dt = fp.read()
+        #     printLog("[N2P]: read " + dt)
+        #     ser.write(('hub ' + dt).encode('utf-8'))
+        #     fp.close()
+        #     os.remove(dir+fname)
 
 if __name__ == '__main__':
     main(timeout = 5)

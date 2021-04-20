@@ -136,19 +136,21 @@ io.on('connection', (socket) =>
         // NOTE: if you've made it here, file is open and read
         console.log('[TEXT]: ' + data);
         var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
+        
+        // N2P UNUSED
         // write command output to the file
-        if (data_parsed.startsWith('AUDIO '))
-        {
-          var data_trimmed = data_parsed.substr(6)
-          console.log('[N2P]: ' + data_trimmed)
-          fs.writeFile(dirOut + 'audio.txt', data_trimmed, function (err) 
-          {
-            if (err)
-            {
-              throw err;
-            } 
-          });
-        }
+        // if (data_parsed.startsWith('AUDIO '))
+        // {
+        //   var data_trimmed = data_parsed.substr(6)
+        //   console.log('[N2P]: ' + data_trimmed)
+        //   fs.writeFile(dirOut + 'audio.txt', data_trimmed, function (err) 
+        //   {
+        //     if (err)
+        //     {
+        //       throw err;
+        //     } 
+        //   });
+        // }
 
         
         io.emit('threadMsg', data_parsed);

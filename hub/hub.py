@@ -420,7 +420,11 @@ def main(timeout):
             ser.timeout = 0
         
         else:
-            res = res.decode().strip()
+            try:
+                res = res.decode().strip()
+                share = True
+            except Exception:
+                pass
 
         if share:
             printLog('INP: ', res)

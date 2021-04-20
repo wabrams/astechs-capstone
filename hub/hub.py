@@ -424,7 +424,7 @@ def main(timeout):
             ser.timeout = 0
             # N2P BYPASS
             if index == 1:
-                s.write(b'hub NODE1 ON\n')
+                ser.write(b'hub NODE1 ON\n')
             else:
                 ser.write(('hub ' + res).encode('ascii'))
         

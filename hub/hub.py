@@ -298,11 +298,12 @@ def select_command(text, commands, threshold = 0.4):
 
 # CMD1: 'test command one'
 cmd1 = [
-  ['test', 'command', 'one'],
-  ['command', 'one'],
-  ['test', 'command', 'one'],
-  ['test', 'command', 'one'],
-  ['that\'s', 'command', 'one']
+  ['that\'s', 'one'],            # WA 4/20/2021 for AT3
+  ['that\'s', 'one'],            # WA 4/20/2021 for AT3
+  ['been', 'one'],               # WA 4/20/2021 for AT3
+  ['asked', 'met', 'one'],
+  ['that', 'one']
+#   ['test', 'command', 'one'],
 ]
 # CMD2: 'some long sentence'
 cmd2 = [

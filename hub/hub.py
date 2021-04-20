@@ -424,7 +424,7 @@ def main(timeout):
             # N2P BYPASS
             ser.write(('hub ' + res).encode('utf-8'))
         
-        else:
+        elif len(res) < 64:
             try:
                 res = res.decode().strip()
                 if res != '':

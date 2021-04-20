@@ -422,7 +422,7 @@ def main(timeout):
             share = True
             ser.timeout = 0
             # N2P BYPASS
-            ser.write(bytes('hub ' + res))
+            ser.write(('hub ' + res).encode('ascii'))
         
         elif len(res) < 64:
             try:

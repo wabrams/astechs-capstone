@@ -422,7 +422,7 @@ def main(timeout):
             share = True
             ser.timeout = 0
             # N2P BYPASS
-            ser.write(('hub ' + res).encode('utf-8'))
+            ser.write(bytes('hub ' + res))
         
         elif len(res) < 64:
             try:
@@ -440,6 +440,8 @@ def main(timeout):
             fnew.write(res)
             fnew.close()
         
+        # TODO: ot-cli adds the '>' character, make sure to ignore it! '>' is the default response from the hub <msg> command
+
         # N2P UNUSED
         # # read files if any and send to serial
         # dir = 'share/n2p/'

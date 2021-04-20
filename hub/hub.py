@@ -362,7 +362,8 @@ def setupSerial():
     listPorts()
     while True:
         try:
-            port = input('\tenter port: ')
+            # port = input('\tenter port: ')
+            port = '/dev/ttyACM0'
             s = serial.Serial(port)
             s.baudrate = 115200
             s.bytesize = serial.EIGHTBITS

@@ -422,7 +422,8 @@ def main(timeout):
         else:
             try:
                 res = res.decode().strip()
-                share = True    
+                if res != '':
+                    share = True    
             except Exception:
                 share = False
                 pass

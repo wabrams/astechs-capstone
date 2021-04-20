@@ -444,7 +444,7 @@ def main(timeout):
             fp = open(dir+fname)
             dt = fp.read()
             printLog("[N2P]: read " + dt)
-            ser.write(('hub ' + dt).en  code('utf-8'))
+            ser.write(('hub ' + dt).encode('utf-8'))
             fp.close()
             os.remove(dir+fname)
 

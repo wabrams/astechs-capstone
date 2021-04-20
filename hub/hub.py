@@ -382,6 +382,7 @@ def main(timeout):
     ser = setupSerial()
 
     while(True):
+        # read and process from serial
         res = ser.readline()
         share = False
 
@@ -414,19 +415,30 @@ def main(timeout):
                 if index > 0:
                     result = str(index) + '\n'
             printLog('Matched to CMD#', result)
+            res = "AUDIO " + cmds_map[index]
             share = True
-            res = cmds_map[index]
             ser.timeout = 0
-            ser.write("hub "+res)
         
         else:
             res = res.decode().strip()
+
+        if share:
             printLog('INP: ', res)
             fname = 'share/p2n/' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.txt'
-            fmsg  = res
             fnew = open(fname, 'w')
-            fnew.write(fmsg)
+            fnew.write(res)
             fnew.close()
+
+        # read files if any and send to serial
+        dir = 'share/n2p/'
+        for fname in os.listdir(dir):
+            print("filename: " + fname)
+            fp = open(dir+fname)
+            dt = fp.read()
+            print("data: " + dt)
+            ser.write(dt)
+            fp.close()
+            os.remove(dir+fname)
 
 if __name__ == '__main__':
     main(timeout = 5)

@@ -9,6 +9,7 @@ var io = require('socket.io')(server)
 
 // File Setup
 var fs = require('fs'); //require filesystem module
+const { ADDRGETNETWORKPARAMS } = require('node:dns');
 
 server.listen(8080); 
 console.log('[SETUP]: listening on *:8080')
@@ -103,18 +104,21 @@ io.on('connection', (socket) =>
   });
   // socket.on('updateReq', () => 
   // {
-  //   count += 1;
-  //   console.log('[SIO]: update request received');
-  //   io.emit('updateRes', count);
-  // });
-
-});
-
-// Share Reading
-const dir = 'share/p2n/';
-setInterval(() => 
+    //   count += 1;
+    //   console.log('[SIO]: update request received');
+    //   io.emit('updateRes', count);
+    // });
+    
+  });
+  
+  // Share Reading
+  var countOut = 0;
+  const dirOut = 'share/n2p/';
+  
+  const dirIn = 'share/p2n/';
+  setInterval(() => 
 {
-  fs.readdir(dir, (err, files) => 
+  fs.readdir(dirIn, (err, files) => 
   {
     if (err) 
     {
@@ -123,16 +127,32 @@ setInterval(() =>
 
     files.forEach(file => 
     {
-      console.log('[FILE]: ' + (dir + file));
-      fs.readFile((dir + file), function(err, data)
+      console.log('[FILE]: ' + (dirIn + file));
+      fs.readFile((dirIn + file), function(err, data)
       {
         if (err)
         {
           throw err;
         }
+        // NOTE: if you've made it here, file is open and read
         console.log('[TEXT]: ' + data);
-        io.emit('threadMsg', String.fromCharCode.apply(String, new Uint8Array(data)));
-        fs.unlink((dir + file), (err) => 
+        var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
+        // write command output to the file
+        if (data_parsed.startsWith('AUDIO '))
+        {
+          fs.writeFile(dirOut + 'audio.txt', data_parsed.substr(6), function (err) 
+          {
+            if (err)
+            {
+              throw err;
+            } 
+          });
+        }
+
+        
+        io.emit('threadMsg', data_parsed);
+        // NOTE: no more data processing at this point
+        fs.unlink((dirIn + file), (err) => 
         {
           if (err) 
           {
@@ -142,4 +162,9 @@ setInterval(() =>
       });      
     });
   });
-}, 1000)
+}, 1000);
+
+// setInterval(() => 
+// {
+
+// }, 1000);

@@ -139,7 +139,9 @@ io.on('connection', (socket) =>
         // write command output to the file
         if (data_parsed.startsWith('AUDIO '))
         {
-          fs.writeFile(dirOut + 'audio.txt', data_parsed.substr(6), function (err) 
+          var data_trimmed = data_parsed.substr(6)
+          console.log('[N2P]: ' + data_trimmed)
+          fs.writeFile(dirOut + 'audio.txt', data_trimmed, function (err) 
           {
             if (err)
             {

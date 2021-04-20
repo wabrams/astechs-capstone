@@ -440,11 +440,11 @@ def main(timeout):
         # read files if any and send to serial
         dir = 'share/n2p/'
         for fname in os.listdir(dir):
-            print("[N2P]: file " + fname)
+            printLog("[N2P]: file " + fname)
             fp = open(dir+fname)
             dt = fp.read()
-            print("[N2P]: read " + dt)
-            ser.write(('hub ' + dt).encode('utf-8'))
+            printLog("[N2P]: read " + dt)
+            ser.write(('hub ' + dt).en  code('utf-8'))
             fp.close()
             os.remove(dir+fname)
 

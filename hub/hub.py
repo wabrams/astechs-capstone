@@ -423,7 +423,10 @@ def main(timeout):
             share = True
             ser.timeout = 0
             # N2P BYPASS
-            ser.write(('hub ' + res).encode('ascii'))
+            if index == 1:
+                s.write(b'hub NODE1 ON\n')
+            else:
+                ser.write(('hub ' + res).encode('ascii'))
         
         elif len(res) < 64:
             try:

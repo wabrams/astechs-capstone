@@ -440,7 +440,7 @@ def main(timeout):
             fp = open(dir+fname)
             dt = fp.read()
             print("data: " + dt)
-            ser.write(dt.encode('utf-8'))
+            ser.write(('hub ' + dt).encode('utf-8'))
             fp.close()
             os.remove(dir+fname)
 

@@ -422,7 +422,7 @@ def main(timeout):
             share = True
             ser.timeout = 0
             # N2P BYPASS
-            ser.write(res)
+            ser.write(('hub ' + res).encode('utf-8'))
         
         else:
             try:

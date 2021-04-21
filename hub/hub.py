@@ -18,6 +18,11 @@ import serial.tools.list_ports
 import glob
 import platform
 from datetime import datetime
+import time
+
+import requests
+
+# from socketIO_client import SocketIO, LoggingNamespace
 
 ###############################################
 #  Converting VOX encoded data to 16 bit PCM  #
@@ -381,82 +386,75 @@ def setupSerial():
 ################
 
 def main(timeout):
-    ser = setupSerial()
+    url = "http://localhost:3000"
+    data = {'msg': 'Hi!!!'}
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-    while(True):
-        # read and process from serial
-        res = ser.readline()
-        share = False
+    while True:
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+        printLog("[NODE RESPONSE]: ", r.content)
+        time.sleep(1)
+    # while True:
+    #     with SocketIO( 'localhost', 3000, LoggingNamespace ) as socketIO:
+    #         now = datetime.now()
+    #         socketIO.emit( 'python-message', now.strftime( "%-d %b %Y %H:%M:%S.%f" ) )
+    #         socketIO.wait( seconds=1 )
+    # ser = setupSerial()
 
-        # audio data
-        if b'st' in res:
-            # read until BTN timeout
-            ser.timeout = timeout
-            printLog('Reading from Serial Port!')
-            res = ser.read(16000*timeout)
+    # while(True):
+    #     # read and process from serial
+    #     res = ser.readline()
+    #     share = False
 
-            # process data from Vox to PCM
-            printLog('Converting VOX to PCM')
-            RawPCM = np.array(decodeTBS2(res),dtype=np.int16)[1500:]
+    #     # audio data
+    #     if b'st' in res:
+    #         # read until BTN timeout
+    #         ser.timeout = timeout
+    #         printLog('Reading from Serial Port!')
+    #         res = ser.read(16000*timeout)
 
-            # save as wav file with
-            printLog('Creating .WAV File to Parse')
-            filename = 'input_wav'
-            toWav(RawPCM, filename)
+    #         # process data from Vox to PCM
+    #         printLog('Converting VOX to PCM')
+    #         RawPCM = np.array(decodeTBS2(res),dtype=np.int16)[1500:]
 
-            # gather list of strings from Vox
-            printLog('Converting Audio to Text')
-            parsed_text = wav2str(filename + '.wav')
-            printLog('Parsed Text:\n\t', parsed_text)
+    #         # save as wav file with
+    #         printLog('Creating .WAV File to Parse')
+    #         filename = 'input_wav'
+    #         toWav(RawPCM, filename)
 
-            # anticipated command by comparing to other vosk results
-            printLog('Matching Text against Commands')
-            result = '-1\n'
-            index = 0
-            if parsed_text:
-                index = select_command(parsed_text, cmds) + 1
-                if index > 0:
-                    result = str(index) + '\n'
-            printLog('Matched to CMD#', result)
-            # res = "AUDIO " + cmds_map[index]
-            res = cmds_map[index]
-            share = True
-            ser.timeout = 0
-            # N2P BYPASS
-            if index == 1:
-                ser.write(b'hub NODE1 ON\n')
-            else:
-                ser.write(('hub ' + res).encode('ascii'))
+    #         # gather list of strings from Vox
+    #         printLog('Converting Audio to Text')
+    #         parsed_text = wav2str(filename + '.wav')
+    #         printLog('Parsed Text:\n\t', parsed_text)
+
+    #         # anticipated command by comparing to other vosk results
+    #         printLog('Matching Text against Commands')
+    #         result = '-1\n'
+    #         index = 0
+    #         if parsed_text:
+    #             index = select_command(parsed_text, cmds) + 1
+    #             if index > 0:
+    #                 result = str(index) + '\n'
+    #         printLog('Matched to CMD#', result)
+    #         # res = "AUDIO " + cmds_map[index]
+    #         res = cmds_map[index]
+    #         ser.timeout = 0
+    #         # N2P BYPASS
+    #         if index == 1:
+    #             ser.write(b'hub NODE1 ON\n')
+    #         else:
+    #             ser.write(('hub ' + res).encode('ascii'))
         
-        elif len(res) < 64:
-            try:
-                res = res.decode().strip()
-                if res != '':
-                    share = True    
-            except Exception:
-                share = False
-                pass
-
-        if share:
-            printLog('[P2N]: ', res)
-            fname = 'share/p2n/' + datetime.now().strftime("%Y%m%d-%H%M%S") + '.txt'
-            fnew = open(fname, 'w')
-            fnew.write(res)
-            fnew.close()
+    #     elif len(res) < 64:
+    #         try:
+    #             res = res.decode().strip()
+    #             if res != '':
+    #                 share = True    
+    #         except Exception:
+    #             share = False
+    #             pass
         
         # TODO: ot-cli adds the '>' character, make sure to ignore it! '>' is the default response from the hub <msg> command
-
-        # N2P UNUSED
-        # # read files if any and send to serial
-        # dir = 'share/n2p/'
-        # for fname in os.listdir(dir):
-        #     printLog("[N2P]: file " + fname)
-        #     fp = open(dir+fname)
-        #     dt = fp.read()
-        #     printLog("[N2P]: read " + dt)
-        #     ser.write(('hub ' + dt).encode('utf-8'))
-        #     fp.close()
-        #     os.remove(dir+fname)
 
 if __name__ == '__main__':
     main(timeout = 5)

@@ -1,23 +1,27 @@
+////////////////////////////////////////////////////////////////
 // File: webserver.js
 // Authors: Malcolm McKellips, William Abrams
 // Description: Backend server for servicing Astechs Web UI
+////////////////////////////////////////////////////////////////
 
-// Server Setup
+////////////////////////////////////////////////////////////////
+// Essentials Setup
+////////////////////////////////////////////////////////////////
+var fs   = require('fs');
 var http = require('http');
-var server = http.createServer(server_handler);
-var io = require('socket.io')(server)
+var sio  = require('socket.io');
+var app  = require('express')();
+var bdp  = require('body-parser');
 
-// File Setup
-var fs = require('fs'); //require filesystem module
-
-server.listen(8080); 
-console.log('[SETUP]: listening on *:8080')
-
-// Create Server
+////////////////////////////////////////////////////////////////
+// Create Server for Web
+////////////////////////////////////////////////////////////////
+var server = http.createServer(server_handler).listen(8080);
+console.log('[SERVER]: webui on *:8080');
 function server_handler (req, res)
 {
   console.log("[REQ]: " + req.url);
-
+  
   if (req.url == '/index.html' || req.url == "/" || req.url == "/:")
   {
     fs.readFile(__dirname + '/html/index.html', function(err, text)
@@ -92,8 +96,10 @@ function server_handler (req, res)
   }
 };
 
-// var count = 0;
-// WebSocket Connection
+////////////////////////////////////////////////////////////////
+// Socket to Communicate with WebUI
+////////////////////////////////////////////////////////////////
+var io = sio(server)
 io.on('connection', (socket) => 
 {
   console.log('[SIO]: a user connected');
@@ -110,64 +116,45 @@ io.on('connection', (socket) =>
     
   });
   
-  // Share Reading
-  var countOut = 0;
-  const dirOut = 'share/n2p/';
-  
-  const dirIn = 'share/p2n/';
-  setInterval(() => 
-{
-  fs.readdir(dirIn, (err, files) => 
-  {
-    if (err) 
-    {
-        throw err;
-    }
-
-    files.forEach(file => 
-    {
-      console.log('[FILE]: ' + (dirIn + file));
-      fs.readFile((dirIn + file), function(err, data)
-      {
-        if (err)
-        {
-          throw err;
-        }
-        // NOTE: if you've made it here, file is open and read
-        console.log('[TEXT]: ' + data);
-        var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
-        
-        // N2P UNUSED
-        // write command output to the file
-        // if (data_parsed.startsWith('AUDIO '))
-        // {
-        //   var data_trimmed = data_parsed.substr(6)
-        //   console.log('[N2P]: ' + data_trimmed)
-        //   fs.writeFile(dirOut + 'audio.txt', data_trimmed, function (err) 
-        //   {
-        //     if (err)
-        //     {
-        //       throw err;
-        //     } 
-        //   });
-        // }
-
-        
-        io.emit('threadMsg', data_parsed);
-        // NOTE: no more data processing at this point
-        fs.unlink((dirIn + file), (err) => 
-        {
-          if (err) 
-          {
-              throw err;
-          }
-        });
-      });      
-    });
-  });
-}, 1000);
-
 // setInterval(() => 
 // {
-
+// var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
+// io.emit('threadMsg', data_parsed);
 // }, 1000);
+
+////////////////////////////////////////////////////////////////
+// Create Server for Python
+////////////////////////////////////////////////////////////////
+app.use(bdp.json());
+app.post('/', function(req, res)
+{
+  var msg = req.body.msg;
+  console.log("python: " + msg);
+  res.setHeader("Content-Type", "text/plain");
+  res.end('test');
+});
+
+var pyserver = http.Server(app).listen(3000);
+console.log('[SERVER]: python on *:3000');
+
+
+////////////////////////////////////////////////////////////////
+// Socket to Communicate with Python
+////////////////////////////////////////////////////////////////
+// var pyio = sio(pyserver);
+
+// pyio.on( "connection", function(pysock) 
+// {
+//   console.log('[SIO]: a user connected');
+  
+//   pysock.on('disconnect', () => 
+//   {
+//     console.log('[SIO] a user disconnected');
+//   });
+
+//   pysock.on( 'python-message', function( msg ) 
+//   {
+//     console.log('message Receiving');
+//       // httpsocket.broadcast.emit( 'message', msg );
+//   });
+// });

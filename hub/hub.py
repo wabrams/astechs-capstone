@@ -385,15 +385,20 @@ def setupSerial():
 #  Main Loop   #
 ################
 
+
 def main(timeout):
+    toggler = False
     url = "http://localhost:3000"
-    data = {'msg': 'Hi!!!'}
+    data_tog_y = {'msg': 'NODE1 IS ON'}
+    data_tog_n = {'msg': 'NODE1 IS OFF'}
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
     while True:
+        data = data_tog_y if toggler else data_tog_n
         r = requests.post(url, data=json.dumps(data), headers=headers)
         printLog("[NODE RESPONSE]: ", r.content)
-        time.sleep(1)
+        toggler = not toggler
+        time.sleep(5)
 
     # while(True):
     #     # read and process from serial

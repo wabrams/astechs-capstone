@@ -95,28 +95,31 @@ function server_handler (req, res)
 ////////////////////////////////////////////////////////////////
 
 var n1_stat = false;
-var n2_stat = true; //TODO: testing, should start as false
+var n2_stat = false;
 
-var n1_pow_arr = new Array(20).fill(0);
+var n1_pow_arr = Array.from(new Array(20).keys()); //TODO: testing, should start as .fill(0);
 var n2_pow_arr = new Array(20).fill(0);
 
 ////////////////////////////////////////////////////////////////
 // Commands for Hub System
 ////////////////////////////////////////////////////////////////
 
-const CMD_N1_ON  = 'NODE1 ON\r\n';
-const CMD_N1_OFF = 'NODE1 OFF\r\n';
-const CMD_N1_TOG = 'NODE1 TOG\r\n';
+const CMD_N1_ON  = 'NODE1 ON';
+const CMD_N1_OFF = 'NODE1 OFF';
+const CMD_N1_TOG = 'NODE1 TOG';
+
+const RSP_N1_ON  = 'NODE1 IS ON';
+const RSP_N1_OFF = 'NODE1 IS OFF';
 
 const CMD_N2_ON  = 'NODE2 ON\r\n';
 const CMD_N2_OFF = 'NODE2 OFF\r\n';
 const CMD_N2_TOG = 'NODE2 TOG\r\n';
 
+
 ////////////////////////////////////////////////////////////////
 // Socket to Communicate with WebUI
 ////////////////////////////////////////////////////////////////
 var io = sio(server)
-// var count = 0
 io.on('connection', (socket) => 
 {
   console.log('[SIO]: a user connected');
@@ -127,12 +130,20 @@ io.on('connection', (socket) =>
   
   socket.on('update_req', () => 
   {
-    console.log("updating node state!");
+    console.log('[SIO]: update request received...');
+
+    console.log("[SIO]: updating node status!");
     io.emit('update_res_stat', n1_stat, n2_stat);
-      // count += 1;
-      // console.log('[SIO]: update request received');
-      // io.emit('update_res_stat', count);
+
+    console.log('[SIO]: updating power consumption!');
+    io.emit('update_res_pow', n1_pow_arr, n2_pow_arr);
   });
+
+  setInterval(() => 
+  {
+    io.emit('update_res_stat', n1_stat, n2_stat);
+    io.emit('update_res_pow', n1_pow_arr, n2_pow_arr);
+  }, 1000);
     
 });
 
@@ -144,6 +155,27 @@ app.post('/', function(req, res)
 {
   var msg = req.body.msg;
   console.log("python: " + msg);
+
+  switch(String(msg))
+  {
+    case RSP_N1_ON:
+      // console.log('n1 on');
+      n1_stat = true;
+      break;
+    case RSP_N1_OFF:
+      // console.log('n1 off');
+      n1_stat = false;
+      break;
+    case RSP_N2_ON:
+      // console.log('n2 on');
+      n2_stat = true;
+      break;
+    case RSP_N2_OFF:
+      // console.log('n2 off');
+      n2_stat = false;
+      break;
+  }
+
   res.setHeader("Content-Type", "text/plain");
   res.end('test');
 });
@@ -151,10 +183,24 @@ app.post('/', function(req, res)
 var pyserver = http.Server(app).listen(3000);
 console.log('[SERVER]: python on *:3000');
 
-
+// USEFUL:
 
 // setInterval(() => 
 // {
 // var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
 // io.emit('threadMsg', data_parsed);
 // }, 1000);
+
+// function updateData1(powread)
+// {
+//   for (let i = 0; i < 10 - 1; i++)
+//     powdata1[i] = powdata1[i + 1];
+//   powdata1[10 - 1] = powread;
+// }
+
+// function updateData2(powread)
+// {
+//   for (let i = 0; i < 10 - 1; i++)
+//     powdata2[i] = powdata2[i + 1];
+//   powdata2[10 - 1] = powread;
+// }

@@ -104,8 +104,8 @@ function server_handler (req, res)
 
 var n1_stat = false;
 var n2_stat = false;
-
-var n1_pow_arr = Array.from(new Array(20).keys()); //TODO: testing, should start as .fill(0);
+                  // Array.from(new Array(20).keys())
+var n1_pow_arr = new Array(20).fill(0);
 var n2_pow_arr = new Array(20).fill(0);
 
 var cmd_q = [];
@@ -168,10 +168,14 @@ app.post('/', function(req, res)
   if (s.startsWith('NODE1 ADC'))
   {
     var n = Number(s.split(' ')[2]);
+    n1_pow_arr.shift();
+    n1_pow_arr.push(n);
   }
   else if (s.startsWith('NODE2 ADC'))
   {
     var n = Number(s.split(' ')[2]);
+    n2_pow_arr.shift();
+    n2_pow_arr.push(n);
   }
   else 
     switch(String(msg))

@@ -406,7 +406,6 @@ def main(timeout):
         toggler = not toggler
         time.sleep(5)
 
-
     # while(True):
     #     # read and process from serial
     #     res = ser.readline()

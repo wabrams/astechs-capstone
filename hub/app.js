@@ -187,25 +187,3 @@ app.post('/', function(req, res)
 
 var pyserver = http.Server(app).listen(3000);
 console.log('[SERVER]: python on *:3000');
-
-// USEFUL:
-
-// setInterval(() => 
-// {
-// var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
-// io.emit('threadMsg', data_parsed);
-// }, 1000);
-
-// function updateData1(powread)
-// {
-//   for (let i = 0; i < 10 - 1; i++)
-//     powdata1[i] = powdata1[i + 1];
-//   powdata1[10 - 1] = powread;
-// }
-
-// function updateData2(powread)
-// {
-//   for (let i = 0; i < 10 - 1; i++)
-//     powdata2[i] = powdata2[i + 1];
-//   powdata2[10 - 1] = powread;
-// }

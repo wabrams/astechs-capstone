@@ -53,3 +53,19 @@ li a:hover
 {
   padding-bottom: 10px;
 }
+
+
+.btn_on
+{
+  background-color: #6edc7b;
+}
+
+.btn_off
+{
+  background-color: #ac454c;
+}
+
+.btn_tog
+{
+  background-color: #6ea6db;
+}

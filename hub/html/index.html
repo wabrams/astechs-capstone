@@ -41,13 +41,23 @@
         <img id='n1img_off' src="/img/node_off.png" width='50' alt="concept outlet">
         <img id='n1img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
         <p>Custom PCB running Thread controlling power outlet!</p>
+        <span>
+          <button class='btn_on'  onclick='btnN1on()' >On</button>
+          <button class='btn_off' onclick='btnN1off()'>Off</button>
+          <button class='btn_tog' onclick='btnN1tog()'>Tog</button>
+        </span>
       </div>
       <div class="column">
         <h2>Node #2</h2>
         <p>NTB1</p>
         <img id='n2img_off' src="/img/node_off.png" width='50' alt="concept outlet">
         <img id='n2img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
-        <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
+        <p>Ask us about our TRIAC power control circuitry!</p>
+        <span>
+          <button class='btn_on'  onclick='btnN2on()' >On</button>
+          <button class='btn_off' onclick='btnN2off()'>Off</button>
+          <button class='btn_tog' onclick='btnN2tog()'>Tog</button>
+        </span>
       </div>
     </div>
   </div>
@@ -57,8 +67,6 @@
   document.getElementById("btn0").style.background='#00aa00'; -->
 
   <button id='btn' onclick="btnUpdate()">Manual Update</button> 
-
-  <button id='btn1' onclick="btnNode1On()">Turn On</button> 
   
   <div id='livePlot1'></div>
   
@@ -193,9 +201,34 @@
       socket.emit('update_req');
     };
 
-    function btnNode1On()
+    function btnN1on()
     {
       socket.emit('send_cmd', CMD_N1_ON);
+    }
+
+    function btnN1off()
+    {
+      socket.emit('send_cmd', CMD_N1_OFF);
+    }
+
+    function btnN1tog()
+    {
+      socket.emit('send_cmd', CMD_N1_TOG);
+    }
+
+    function btnN2on()
+    {
+      socket.emit('send_cmd', CMD_N2_ON);
+    }
+
+    function btnN2off()
+    {
+      socket.emit('send_cmd', CMD_N2_OFF);
+    }
+
+    function btnN2tog()
+    {
+      socket.emit('send_cmd', CMD_N2_TOG);
     }
 
     socket.on('update_res_stat', function(s1, s2)

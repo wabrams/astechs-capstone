@@ -179,19 +179,19 @@ app.post('/', function(req, res)
   }
   else 
   {
-    if (RSP_N1_ON.contains(String(msg)))
+    if (RSP_N1_ON.includes(String(msg)))
     {
       n1_stat = true;
     }
-    else if (RSP_N1_OFF.contains(String(msg)))
+    else if (RSP_N1_OFF.includes(String(msg)))
     {
       n1_stat = false;
     }
-    else if (RSP_N2_ON.contains(String(msg)))
+    else if (RSP_N2_ON.includes(String(msg)))
     {
       n2_stat = true;
     }
-    else if (RSP_N2_OFF.contains(String(msg)))
+    else if (RSP_N2_OFF.includes(String(msg)))
     {
       n2_stat = false;
     }

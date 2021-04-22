@@ -438,13 +438,13 @@ def main(timeout):
     #         else:
     #             ser.write(('hub ' + res).encode('ascii'))
         #el
-        # if len(res) < 64:
-        #     try:
-        #         res = res.decode().strip()
-        #         if res != '' or res != '>':
-        #             data = res
-        #     except Exception:
-        #         pass
+        if len(res) < 64:
+            try:
+                res = res.decode().strip()
+                if res != '' or res != '>':
+                    data = res
+            except Exception:
+                pass
         
         data_pkt = {'msg': data}
         r = requests.post(url, data=json.dumps(data_pkt), headers=headers)

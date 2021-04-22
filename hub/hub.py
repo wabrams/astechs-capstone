@@ -402,7 +402,7 @@ def main(timeout):
         r = requests.post(url, data=json.dumps(data), headers=headers)
         if len(r.content) > 0:
             printLog("[NODE RESPONSE]: ", r.content)
-            ser.write(r.content)
+            ser.write((b'hub ' + r.content))
         toggler = not toggler
         time.sleep(5)
 

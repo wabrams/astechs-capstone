@@ -1,6 +1,6 @@
 import serial
 
-port = '/dev/ttyACM0'
+port = '/dev/ttyS5'
 s = serial.Serial(port)
 s.baudrate = 115200
 s.bytesize = serial.EIGHTBITS

@@ -178,21 +178,24 @@ app.post('/', function(req, res)
     n2_pow_arr.push(n);
   }
   else 
-    switch(String(msg))
+  {
+    if (RSP_N1_ON.contains(String(msg)))
     {
-      case RSP_N1_ON:
-        n1_stat = true;
-        break;
-      case RSP_N1_OFF:
-        n1_stat = false;
-        break;
-      case RSP_N2_ON:
-        n2_stat = true;
-        break;
-      case RSP_N2_OFF:
-        n2_stat = false;
-        break;
+      n1_stat = true;
     }
+    else if (RSP_N1_OFF.contains(String(msg)))
+    {
+      n1_stat = false;
+    }
+    else if (RSP_N2_ON.contains(String(msg)))
+    {
+      n2_stat = true;
+    }
+    else if (RSP_N2_OFF.contains(String(msg)))
+    {
+      n2_stat = false;
+    }
+  }
 
   if (cmd_q.length > 0)
   {

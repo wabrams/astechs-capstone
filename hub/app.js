@@ -165,15 +165,15 @@ app.post('/', function(req, res)
   var msg = req.body.msg;
   console.log("[P2N] IN: " + msg);
 
-  if (s.startsWith('NODE1 ADC'))
+  if (msg.startsWith('NODE1 ADC'))
   {
-    var n = Number(s.split(' ')[2]);
+    var n = Number(msg.split(' ')[2]);
     n1_pow_arr.shift();
     n1_pow_arr.push(n);
   }
-  else if (s.startsWith('NODE2 ADC'))
+  else if (msg.startsWith('NODE2 ADC'))
   {
-    var n = Number(s.split(' ')[2]);
+    var n = Number(msg.split(' ')[2]);
     n2_pow_arr.shift();
     n2_pow_arr.push(n);
   }

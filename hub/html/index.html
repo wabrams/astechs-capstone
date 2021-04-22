@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>AsTechs WebUI</title>
+
   <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+
   <link rel="stylesheet" href="/css/basic.css">
 </head>
 
 <body>
+  <!-- NAVBAR -->
   <div id='navbar'>
 		<ul>
 			<li><a href="index.html">Home</a></li>
 			<li><a href="about.html">About</a></li>
 		</ul>
 	</div>
-	
+	<!-- INTRO -->
   <div style='text-align: center'>
     <h1 style = "font-size:48px">AsTechs WebUI</h1>
     <img src="/img/astechs.png"  width="256" alt="AsTechs Logo">    
@@ -22,7 +26,7 @@
     
     <hr size="1px" width="90%" color="black"> 
   </div>
-  
+  <!-- DEVICES -->
   <div style='text-align: center'>
     <h2 style='text-align: center'>Device Overview</h2>
     <div class="row">
@@ -45,135 +49,169 @@
         <img id='n2img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
         <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
       </div>
-      <div class="column">
-        <h2>Node #3</h2>
-        <p>NTB2</p>
-        <img id='n3img_off' src="/img/node_off.png" width='50' alt="concept outlet">
-        <img id='n3img_on'  src="/img/node_on.png"  width='50' alt="concept outlet" style="display: none;">
-        <p>Thunderboard Sense 2 running Thread pretending to be a power outlet!</p>
-      </div>
     </div>
-    
   </div>
-    <!-- <button id='btn0' type='button'>BRDA BTN0</button>
-      document.getElementById("btn0").style.background='#aa0000';
-      document.getElementById("btn0").style.background='#00aa00'; -->
-      <!-- <button id='btn' onclick="btnClick()">Click me</button>  -->
-      
-      <!-- <p>Last Received Thread Message: <span id='lastmsg'></span></p> -->
-      <div id='livePlot1'></div>
-      
-      <!-- <script src='/js/powerPlot.js'></script> -->
-      <!-- <script src='/js/threadParse.js'></script> -->
-      
-      <script>
-        var node1_on = false;
-  var node2_on = false;
-  var node3_on = false;
-
-  function toggleNodeImage(divOn, divOff)
-  {
-    var temp = document.getElementById(divOff).style.display;
-    document.getElementById(divOff).style.display = document.getElementById(divOn).style.display;
-    document.getElementById(divOn ).style.display = temp;
-  }
-
-  function turnNodeOn(num)
-  {
-    switch(num)
-    {
-      case 1:
-        if (!node1_on)
-        {
-          node1_on = true;
-          toggleNodeImage('n1img_off', 'n1img_on');
-        }
-        break;
-      case 2:
-        if (!node2_on)
-        {
-          node2_on = true;
-          toggleNodeImage('n2img_off', 'n2img_on');
-        }
-        break;
-      case 3:
-        if (!node3_on)
-        {
-          node3_on = true;
-          toggleNodeImage('n3img_off', 'n3img_on');
-        }
-        break;
-    }
-  }
-
-  function turnNodeOff(num)
-  {
-    switch(num)
-    {
-      case 1:
-        if (node1_on)
-        {
-          node1_on = false;
-          toggleNodeImage('n1img_off', 'n1img_on');
-        }
-        break;
-      case 2:
-        if (node2_on)
-        {
-          node2_on = false;
-          toggleNodeImage('n2img_off', 'n2img_on');
-        }
-        break;
-      case 3:
-        if (node3_on)
-        {
-          node3_on = false;
-          toggleNodeImage('n3img_off', 'n3img_on');
-        }
-        break;
-    }
-  }
-
-  function updateNodeState(num, state)
-  {
-    if (state)
-      turnNodeOn(num);
-    else
-      turnNodeOff(num);
-  }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-<script>
-  var socket = io(); //load socket.io-client and connect to the host that serves the page
+    
+  <!-- <button id='btn0' type='button'>BRDA BTN0</button>
+  document.getElementById("btn0").style.background='#aa0000';
+  document.getElementById("btn0").style.background='#00aa00'; -->
+  <button id='btn' onclick="btnClick()">Click me</button> 
   
-  // function btnClick() 
-  // {
-  //     socket.emit('updateReq');
-  // };
+  <!-- <p>Last Received Thread Message: <span id='lastmsg'></span></p> -->
+  <div id='livePlot1'></div>
+  
+  <!-- <script src='/js/powerPlot.js'></script> -->
+  <!-- <script src='/js/threadParse.js'></script> -->
+  
+  <!-- STATUS UPDATES -->
+  <script>
+    var node1_on = false;
+    var node2_on = false;
 
-  socket.on('threadMsg', function(msg) 
-  {
-    document.getElementById('lastmsg').innerHTML = msg;
+    function toggleNodeImage(divOn, divOff)
+    {
+      var temp = document.getElementById(divOff).style.display;
+      document.getElementById(divOff).style.display = document.getElementById(divOn).style.display;
+      document.getElementById(divOn ).style.display = temp;
+    }
 
-    if (msg == 'REMT1 NODE1 ON')
-      turnNodeOn(1);
-    else if (msg == 'REMT1 NODE1 OFF')
-      turnNodeOff(1);
-    else if (msg == 'REMT1 NODE1 TOG')
-      updateNodeState(1, !node1_on);
-    else if (msg == 'REMT1 NODE2 TOG')
-      updateNodeState(2, !node2_on);
-  });
+    function turnNodeOn(num)
+    {
+      switch(num)
+      {
+        case 1:
+          if (!node1_on)
+          {
+            node1_on = true;
+            toggleNodeImage('n1img_off', 'n1img_on');
+          }
+          break;
+        case 2:
+          if (!node2_on)
+          {
+            node2_on = true;
+            toggleNodeImage('n2img_off', 'n2img_on');
+          }
+          break;
+      }
+    }
 
-  // socket.on('updateResStatus', function(n1, n2, n3) 
-  // {
-  //   updateNodeState(1, n1);
-  //   updateNodeState(2, n2);
-  //   updateNodeState(3, n3);
-  //   document.getElementById('lastmsg').innerHTML = count;
-  // });
-</script>
+    function turnNodeOff(num)
+    {
+      switch(num)
+      {
+        case 1:
+          if (node1_on)
+          {
+            node1_on = false;
+            toggleNodeImage('n1img_off', 'n1img_on');
+          }
+          break;
+        case 2:
+          if (node2_on)
+          {
+            node2_on = false;
+            toggleNodeImage('n2img_off', 'n2img_on');
+          }
+          break;
+      }
+    }
+
+    function updateNodeState(num, state)
+    {
+      if (state)
+        turnNodeOn(num);
+      else
+        turnNodeOff(num);
+    }
+  </script>
+
+  <!-- POWER UPDATES -->
+  <script>
+    var powdata1 = new Array(20).fill(0);
+    var powdata2 = new Array(20).fill(0);
+
+    var trace1 = {
+      x: interval,
+      y: powdata1,
+      type: 'scatter'
+    };
+
+    var trace2 = {
+      x: interval,
+      y: powdata1,
+      type: 'scatter'
+    };
+
+    var data = [trace1, trace2];
+
+    var layout = {
+      title: 'Power Consumption',
+      showlegend: false,
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor:  "rgba(0,0,0,0)",
+      // margin: {l: 0, r: 0, b: 0, t: 10, pad: 4},
+    };
+
+    Plotly.newPlot('livePlot1', data, layout);
+
+    function updateData1(powread)
+    {
+      for (let i = 0; i < 10 - 1; i++)
+        powdata1[i] = powdata1[i + 1];
+      powdata1[10 - 1] = powread;
+    }
+
+    function updateData2(powread)
+    {
+      for (let i = 0; i < 10 - 1; i++)
+        powdata2[i] = powdata2[i + 1];
+      powdata2[10 - 1] = powread;
+    }
+
+    function updatePlot()
+    {
+      data[0]['y'] = powdata1;
+      data[0]['y'] = powdata2;
+      Plotly.redraw('livePlot1');
+    }
+
+  </script>
+
+  <script>
+    var socket = io(); //load socket.io-client and connect to the host that serves the page
+    
+    function btnClick() 
+    {
+      console.log("sending update request");
+      socket.emit('update_req');
+    };
+
+    socket.on('update_res_stat', function(s1, s2)
+    {
+      updateNodeState(1, s1);
+      updateNodeState(2, s2);
+    });
+
+    socket.on('update_res_pow', function(p1, p2)
+    {
+
+    });
+
+    socket.on('threadMsg', function(msg) 
+    {
+      document.getElementById('lastmsg').innerHTML = msg;
+
+      if (msg == 'REMT1 NODE1 ON')
+        turnNodeOn(1);
+      else if (msg == 'REMT1 NODE1 OFF')
+        turnNodeOff(1);
+      else if (msg == 'REMT1 NODE1 TOG')
+        updateNodeState(1, !node1_on);
+      else if (msg == 'REMT1 NODE2 TOG')
+        updateNodeState(2, !node2_on);
+    });
+  </script>
 
 </body>
 </html>

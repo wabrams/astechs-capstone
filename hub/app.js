@@ -1,10 +1,4 @@
 ////////////////////////////////////////////////////////////////
-// File: webserver.js
-// Authors: Malcolm McKellips, William Abrams
-// Description: Backend server for servicing Astechs Web UI
-////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////
 // Essentials Setup
 ////////////////////////////////////////////////////////////////
 var fs   = require('fs');
@@ -97,9 +91,32 @@ function server_handler (req, res)
 };
 
 ////////////////////////////////////////////////////////////////
+// Variables for Hub System
+////////////////////////////////////////////////////////////////
+
+var n1_stat = false;
+var n2_stat = true; //TODO: testing, should start as false
+
+var n1_pow_arr = new Array(20).fill(0);
+var n2_pow_arr = new Array(20).fill(0);
+
+////////////////////////////////////////////////////////////////
+// Commands for Hub System
+////////////////////////////////////////////////////////////////
+
+const CMD_N1_ON  = 'NODE1 ON\r\n';
+const CMD_N1_OFF = 'NODE1 OFF\r\n';
+const CMD_N1_TOG = 'NODE1 TOG\r\n';
+
+const CMD_N2_ON  = 'NODE2 ON\r\n';
+const CMD_N2_OFF = 'NODE2 OFF\r\n';
+const CMD_N2_TOG = 'NODE2 TOG\r\n';
+
+////////////////////////////////////////////////////////////////
 // Socket to Communicate with WebUI
 ////////////////////////////////////////////////////////////////
 var io = sio(server)
+// var count = 0
 io.on('connection', (socket) => 
 {
   console.log('[SIO]: a user connected');
@@ -107,20 +124,17 @@ io.on('connection', (socket) =>
   {
     console.log('[SIO] a user disconnected');
   });
-  // socket.on('updateReq', () => 
-  // {
-    //   count += 1;
-    //   console.log('[SIO]: update request received');
-    //   io.emit('updateRes', count);
-    // });
-    
-  });
   
-// setInterval(() => 
-// {
-// var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
-// io.emit('threadMsg', data_parsed);
-// }, 1000);
+  socket.on('update_req', () => 
+  {
+    console.log("updating node state!");
+    io.emit('update_res_stat', n1_stat, n2_stat);
+      // count += 1;
+      // console.log('[SIO]: update request received');
+      // io.emit('update_res_stat', count);
+  });
+    
+});
 
 ////////////////////////////////////////////////////////////////
 // Create Server for Python
@@ -138,23 +152,9 @@ var pyserver = http.Server(app).listen(3000);
 console.log('[SERVER]: python on *:3000');
 
 
-////////////////////////////////////////////////////////////////
-// Socket to Communicate with Python
-////////////////////////////////////////////////////////////////
-// var pyio = sio(pyserver);
 
-// pyio.on( "connection", function(pysock) 
+// setInterval(() => 
 // {
-//   console.log('[SIO]: a user connected');
-  
-//   pysock.on('disconnect', () => 
-//   {
-//     console.log('[SIO] a user disconnected');
-//   });
-
-//   pysock.on( 'python-message', function( msg ) 
-//   {
-//     console.log('message Receiving');
-//       // httpsocket.broadcast.emit( 'message', msg );
-//   });
-// });
+// var data_parsed = String.fromCharCode.apply(String, new Uint8Array(data));
+// io.emit('threadMsg', data_parsed);
+// }, 1000);

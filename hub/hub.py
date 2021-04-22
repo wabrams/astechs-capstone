@@ -394,12 +394,6 @@ def main(timeout):
         r = requests.post(url, data=json.dumps(data), headers=headers)
         printLog("[NODE RESPONSE]: ", r.content)
         time.sleep(1)
-    # while True:
-    #     with SocketIO( 'localhost', 3000, LoggingNamespace ) as socketIO:
-    #         now = datetime.now()
-    #         socketIO.emit( 'python-message', now.strftime( "%-d %b %Y %H:%M:%S.%f" ) )
-    #         socketIO.wait( seconds=1 )
-    # ser = setupSerial()
 
     # while(True):
     #     # read and process from serial

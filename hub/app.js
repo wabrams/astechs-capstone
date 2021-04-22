@@ -105,17 +105,9 @@ var cmd_q = [];
 ////////////////////////////////////////////////////////////////
 // Commands for Hub System
 ////////////////////////////////////////////////////////////////
-
-const CMD_N1_ON  = 'NODE1 ON';
-const CMD_N1_OFF = 'NODE1 OFF';
-const CMD_N1_TOG = 'NODE1 TOG';
-
 const RSP_N1_ON  = 'NODE1 IS ON';
 const RSP_N1_OFF = 'NODE1 IS OFF';
 
-const CMD_N2_ON  = 'NODE2 ON';
-const CMD_N2_OFF = 'NODE2 OFF';
-const CMD_N2_TOG = 'NODE2 TOG';
 
 const RSP_N2_ON  = 'NODE2 IS ON';
 const RSP_N2_OFF = 'NODE2 IS OFF';

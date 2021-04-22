@@ -178,6 +178,13 @@
   
   <!-- NODEJS UPDATES -->
   <script>
+    const CMD_N1_ON  = 'NODE1 ON\r\n';
+    const CMD_N1_OFF = 'NODE1 OFF\r\n';
+    const CMD_N1_TOG = 'NODE1 TOG\r\n';
+    const CMD_N2_ON  = 'NODE2 ON\r\n';
+    const CMD_N2_OFF = 'NODE2 OFF\r\n';
+    const CMD_N2_TOG = 'NODE2 TOG\r\n';
+
     var socket = io(); //load socket.io-client and connect to the host that serves the page
     
     function btnUpdate() 
@@ -188,7 +195,7 @@
 
     function btnNode1On()
     {
-      socket.emit('send_cmd', 'NODE1 ON\r\n');
+      socket.emit('send_cmd', CMD_N1_ON);
     }
 
     socket.on('update_res_stat', function(s1, s2)

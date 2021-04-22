@@ -387,6 +387,10 @@ def setupSerial():
 
 
 def main(timeout):
+    # serial port
+    ser = setupSerial()
+
+    # socket to communicate with webui
     toggler = False
     url = "http://localhost:3000"
     data_tog_y = {'msg': 'NODE2 IS ON'}
@@ -396,9 +400,12 @@ def main(timeout):
     while True:
         data = data_tog_y if toggler else data_tog_n
         r = requests.post(url, data=json.dumps(data), headers=headers)
-        printLog("[NODE RESPONSE]: ", r.content)
+        if len(r.content) > 0:
+            printLog("[NODE RESPONSE]: ", r.content)
+            ser.write(r.content)
         toggler = not toggler
         time.sleep(5)
+
 
     # while(True):
     #     # read and process from serial

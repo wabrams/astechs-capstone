@@ -441,7 +441,7 @@ def main(timeout):
         if len(res) < 64:
             try:
                 res = res.decode().strip()
-                if res != '' or res != '>':
+                if res != '' and res != '>':
                     data = res
             except Exception:
                 pass

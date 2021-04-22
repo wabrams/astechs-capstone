@@ -42,7 +42,7 @@
           <button class='btn_r4' onclick='btnR4()'>B4</button>
         </span>
         <br />
-        <button class='btn_rext' onclick='btnRExt()'>BEXT</button>
+        <button class='btn_rext' onclick='btnRExt()' disabled>BEXT</button>
       </div>
       <div class="column">
         <h2>Node #1</h2>
@@ -196,10 +196,10 @@
   <!-- NODEJS UPDATES -->
   <script>
     // remote remote controls
-    const CMD_R1     = 'REMOTE 1\r\n';
-    const CMD_R2     = 'REMOTE 2\r\n'; // TODO
-    const CMD_R3     = 'REMOTE 3\r\n';
-    const CMD_R4     = 'REMOTE 4\r\n';
+    const CMD_R1     = 'NODE1 ON\r\n';
+    const CMD_R2     = 'NODE1 OFF\r\n'; // TODO
+    const CMD_R3     = 'NODE2 ON\r\n';
+    const CMD_R4     = 'NODE2 OFF\r\n';
     const CMD_REXT   = 'REMOTE E\r\n';
     // node controls
     const CMD_N1_ON  = 'NODE1 ON\r\n';

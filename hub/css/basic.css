@@ -54,6 +54,31 @@ li a:hover
   padding-bottom: 10px;
 }
 
+.btn_r1
+{
+  background-color: #ffffff;
+}
+
+.btn_r2
+{
+  background-color: #0b5394;
+}
+
+.btn_r3
+{
+  background-color: #990000;
+}
+
+.btn_r4
+{
+  background-color: #000000;
+}
+
+.btn_rext
+{
+  background-color: #f1c232;
+  width: 50%;
+}
 
 .btn_on
 {

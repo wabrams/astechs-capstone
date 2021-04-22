@@ -64,6 +64,14 @@ function server_handler (req, res)
       res.end(text);
     })
   }
+  else if (req.url == '/img/remote.png')
+  {
+    fs.readFile("img/remote.png", function (err, text)
+    {
+      res.setHeader("Content-Type", "image/png");
+      res.end(text);
+    })
+  }
   else if (req.url == "/img/astechs.png")
   {
     fs.readFile("img/astechs.png", function (err, text)

@@ -33,7 +33,16 @@
       <div class="column">
         <h2>Remote</h2>
         <p>RCS1</p>
+        <img id='rimg' src="/img/remote.png" height='80' alt="remote image">
         <p>Custom PCB running Thread, the remote control for the system!</p>
+        <span>
+          <button class='btn_r1' onclick='btnR1()'>B1</button>
+          <button class='btn_r2' onclick='btnR2()'>B2</button>
+          <button class='btn_r3' onclick='btnR3()'>B3</button>
+          <button class='btn_r4' onclick='btnR4()'>B4</button>
+        </span>
+        <br />
+        <button class='btn_rext' onclick='btnRExt()'>BEXT</button>
       </div>
       <div class="column">
         <h2>Node #1</h2>
@@ -186,6 +195,13 @@
   
   <!-- NODEJS UPDATES -->
   <script>
+    // remote remote controls
+    const CMD_R1     = 'REMOTE 1\r\n';
+    const CMD_R2     = 'REMOTE 2\r\n'; // TODO
+    const CMD_R3     = 'REMOTE 3\r\n';
+    const CMD_R4     = 'REMOTE 4\r\n';
+    const CMD_REXT   = 'REMOTE E\r\n';
+    // node controls
     const CMD_N1_ON  = 'NODE1 ON\r\n';
     const CMD_N1_OFF = 'NODE1 OFF\r\n';
     const CMD_N1_TOG = 'NODE1 TOG\r\n';
@@ -200,6 +216,31 @@
       console.log("sending update request");
       socket.emit('update_req');
     };
+
+    function btnR1()
+    {
+      socket.emit('send_cmd', CMD_R1);
+    }
+
+    function btnR2()
+    {
+      socket.emit('send_cmd', CMD_R2);
+    }
+
+    function btnR3()
+    {
+      socket.emit('send_cmd', CMD_R3);
+    }
+
+    function btnR4()
+    {
+      socket.emit('send_cmd', CMD_R4);
+    }
+
+    function btnRExt()
+    {
+      socket.emit('send_cmd', CMD_REXT);
+    }
 
     function btnN1on()
     {

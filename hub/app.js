@@ -113,12 +113,12 @@ var cmd_q = [];
 ////////////////////////////////////////////////////////////////
 // Commands for Hub System
 ////////////////////////////////////////////////////////////////
-const RSP_N1_ON  = 'NODE1 IS ON';
-const RSP_N1_OFF = 'NODE1 IS OFF';
+const RSP_N1_ON  = '> NODE1 IS ON';
+const RSP_N1_OFF = '> NODE1 IS OFF';
 
 
-const RSP_N2_ON  = 'NODE2 IS ON';
-const RSP_N2_OFF = 'NODE2 IS OFF';
+const RSP_N2_ON  = '> NODE2 IS ON';
+const RSP_N2_OFF = '> NODE2 IS OFF';
 
 ////////////////////////////////////////////////////////////////
 // Socket to Communicate with WebUI

@@ -452,7 +452,7 @@ def main(timeout):
             ser.write((b'hub ' + r.content))
             ser.flush() # super mando
 
-        #time.sleep(1)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main(timeout = 5)

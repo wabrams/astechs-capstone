@@ -116,7 +116,6 @@ var cmd_q = [];
 const RSP_N1_ON  = '> NODE1 IS ON';
 const RSP_N1_OFF = '> NODE1 IS OFF';
 
-
 const RSP_N2_ON  = '> NODE2 IS ON';
 const RSP_N2_OFF = '> NODE2 IS OFF';
 
@@ -166,21 +165,30 @@ app.post('/', function(req, res)
   var msg = req.body.msg;
   console.log("[P2N] IN: " + msg);
 
-  switch(String(msg))
+  if (s.startsWith('NODE1 ADC'))
   {
-    case RSP_N1_ON:
-      n1_stat = true;
-      break;
-    case RSP_N1_OFF:
-      n1_stat = false;
-      break;
-    case RSP_N2_ON:
-      n2_stat = true;
-      break;
-    case RSP_N2_OFF:
-      n2_stat = false;
-      break;
+    var n = Number(s.split(' ')[2]);
   }
+  else if (s.startsWith('NODE2 ADC'))
+  {
+    var n = Number(s.split(' ')[2]);
+  }
+  else 
+    switch(String(msg))
+    {
+      case RSP_N1_ON:
+        n1_stat = true;
+        break;
+      case RSP_N1_OFF:
+        n1_stat = false;
+        break;
+      case RSP_N2_ON:
+        n2_stat = true;
+        break;
+      case RSP_N2_OFF:
+        n2_stat = false;
+        break;
+    }
 
   if (cmd_q.length > 0)
   {

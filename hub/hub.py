@@ -389,8 +389,8 @@ def setupSerial():
 def main(timeout):
     toggler = False
     url = "http://localhost:3000"
-    data_tog_y = {'msg': 'NODE1 IS ON'}
-    data_tog_n = {'msg': 'NODE1 IS OFF'}
+    data_tog_y = {'msg': 'NODE2 IS ON'}
+    data_tog_n = {'msg': 'NODE2 IS OFF'}
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
     while True:

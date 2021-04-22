@@ -100,6 +100,8 @@ var n2_stat = false;
 var n1_pow_arr = Array.from(new Array(20).keys()); //TODO: testing, should start as .fill(0);
 var n2_pow_arr = new Array(20).fill(0);
 
+var cmd_q = [];
+
 ////////////////////////////////////////////////////////////////
 // Commands for Hub System
 ////////////////////////////////////////////////////////////////
@@ -111,10 +113,12 @@ const CMD_N1_TOG = 'NODE1 TOG';
 const RSP_N1_ON  = 'NODE1 IS ON';
 const RSP_N1_OFF = 'NODE1 IS OFF';
 
-const CMD_N2_ON  = 'NODE2 ON\r\n';
-const CMD_N2_OFF = 'NODE2 OFF\r\n';
-const CMD_N2_TOG = 'NODE2 TOG\r\n';
+const CMD_N2_ON  = 'NODE2 ON';
+const CMD_N2_OFF = 'NODE2 OFF';
+const CMD_N2_TOG = 'NODE2 TOG';
 
+const RSP_N2_ON  = 'NODE2 IS ON';
+const RSP_N2_OFF = 'NODE2 IS OFF';
 
 ////////////////////////////////////////////////////////////////
 // Socket to Communicate with WebUI
@@ -139,6 +143,12 @@ io.on('connection', (socket) =>
     io.emit('update_res_pow', n1_pow_arr, n2_pow_arr);
   });
 
+  socket.on('send_cmd', (msg) =>
+  {
+    console.log('w2n: ' + msg);
+    cmd_q.push(msg);
+  });
+
   setInterval(() => 
   {
     io.emit('update_res_stat', n1_stat, n2_stat);
@@ -159,25 +169,28 @@ app.post('/', function(req, res)
   switch(String(msg))
   {
     case RSP_N1_ON:
-      // console.log('n1 on');
       n1_stat = true;
       break;
     case RSP_N1_OFF:
-      // console.log('n1 off');
       n1_stat = false;
       break;
     case RSP_N2_ON:
-      // console.log('n2 on');
       n2_stat = true;
       break;
     case RSP_N2_OFF:
-      // console.log('n2 off');
       n2_stat = false;
       break;
   }
 
-  res.setHeader("Content-Type", "text/plain");
-  res.end('test');
+  if (cmd_q.length > 0)
+  {
+    res.setHeader("Content-Type", "text/plain");
+    res.end(cmd_q.shift());
+  }
+  else
+  {
+    res.end();
+  }
 });
 
 var pyserver = http.Server(app).listen(3000);

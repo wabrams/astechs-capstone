@@ -56,7 +56,9 @@
   document.getElementById("btn0").style.background='#aa0000';
   document.getElementById("btn0").style.background='#00aa00'; -->
 
-  <button id='btn' onclick="btnClick()">Click me</button> 
+  <button id='btn' onclick="btnUpdate()">Manual Update</button> 
+
+  <button id='btn1' onclick="btnNode1On()">Turn On</button> 
   
   <div id='livePlot1'></div>
   
@@ -178,11 +180,16 @@
   <script>
     var socket = io(); //load socket.io-client and connect to the host that serves the page
     
-    function btnClick() 
+    function btnUpdate() 
     {
       console.log("sending update request");
       socket.emit('update_req');
     };
+
+    function btnNode1On()
+    {
+      socket.emit('send_cmd', 'NODE1 ON\r\n');
+    }
 
     socket.on('update_res_stat', function(s1, s2)
     {

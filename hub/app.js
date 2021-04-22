@@ -164,7 +164,7 @@ app.use(bdp.json());
 app.post('/', function(req, res)
 {
   var msg = req.body.msg;
-  console.log("python: " + msg);
+  console.log("[P2N] IN: " + msg);
 
   switch(String(msg))
   {

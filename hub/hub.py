@@ -389,28 +389,16 @@ def setupSerial():
 def main(timeout):
     # serial port
     ser = setupSerial()
+    ser.timeout = 1
 
-    # socket to communicate with webui
-    toggler = False
     url = "http://localhost:3000"
-    data_tog_y = {'msg': 'NODE2 IS ON'}
-    data_tog_n = {'msg': 'NODE2 IS OFF'}
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
     while True:
-        data = data_tog_y if toggler else data_tog_n
-        r = requests.post(url, data=json.dumps(data), headers=headers)
-        if len(r.content) > 0:
-            printLog("[NODE RESPONSE]: ", r.content)
-            ser.write((b'hub ' + r.content))
-        toggler = not toggler
-        time.sleep(5)
+        data = "keep-alive"
+        res = ser.readline()
 
-    # while(True):
-    #     # read and process from serial
-    #     res = ser.readline()
-    #     share = False
-
+        # read and process from serial
     #     # audio data
     #     if b'st' in res:
     #         # read until BTN timeout
@@ -449,17 +437,22 @@ def main(timeout):
     #             ser.write(b'hub NODE1 ON\n')
     #         else:
     #             ser.write(('hub ' + res).encode('ascii'))
-        
-    #     elif len(res) < 64:
-    #         try:
-    #             res = res.decode().strip()
-    #             if res != '':
-    #                 share = True    
-    #         except Exception:
-    #             share = False
-    #             pass
-        
-        # TODO: ot-cli adds the '>' character, make sure to ignore it! '>' is the default response from the hub <msg> command
+        #el
+        if len(res) < 64:
+            try:
+                res = res.decode().strip()
+                if res != '' or res != '>':
+                    data = res
+            except Exception:
+                pass
+         
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+        if len(r.content) > 0:
+            printLog("[NODE RESPONSE]: ", r.content)
+            ser.write((b'hub ' + r.content))
+            ser.flush() # super mando
+
+        #time.sleep(1)
 
 if __name__ == '__main__':
     main(timeout = 5)

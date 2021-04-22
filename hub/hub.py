@@ -395,7 +395,7 @@ def main(timeout):
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
     while True:
-        data = "keepalive"
+        data = "keep-alive"
         res = ser.readline()
 
         # read and process from serial
@@ -445,8 +445,9 @@ def main(timeout):
         #             data = res
         #     except Exception:
         #         pass
-         
-        r = requests.post(url, data=json.dumps(data), headers=headers)
+        
+        data_pkt = {'msg': data}
+        r = requests.post(url, data=json.dumps(data_pkt), headers=headers)
         if len(r.content) > 0:
             printLog("[NODE RESPONSE]: ", r.content)
             ser.write((b'hub ' + r.content))

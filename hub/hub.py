@@ -395,7 +395,7 @@ def main(timeout):
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
     while True:
-        data = "keep-alive"
+        data = "keepalive"
         res = ser.readline()
 
         # read and process from serial

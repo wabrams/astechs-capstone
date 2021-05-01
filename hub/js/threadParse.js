@@ -1,3 +1,5 @@
+// threadParse.js is now unused, but handled dealing with received messages
+
 function toggleNodeImage(divOn, divOff)
 {
   var temp = document.getElementById(divOff).style.display;

@@ -448,12 +448,11 @@ def main(timeout):
         
         data_pkt = {'msg': data}
         r = requests.post(url, data=json.dumps(data_pkt), headers=headers)
+        # this if statement checks if Node sent anything back to the Thread network
         if len(r.content) > 0:
             printLog("[NODE RESPONSE]: ", r.content)
             ser.write((b'hub ' + r.content))
             ser.flush() # super mando
-
-        time.sleep(1)
 
 if __name__ == '__main__':
     main(timeout = 5)
